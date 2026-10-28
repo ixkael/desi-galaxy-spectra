@@ -17,6 +17,9 @@ Shared running over the fixed batches:
   dgs claim    --batch ID          dgs release [--force] --batch ID          dgs next
   dgs status   [--deep]            dgs doctor                                dgs index
   dgs deliver  --batch ID
+
+Regression against the committed references (exit 1 unless it passes):
+  dgs regress  --reference {21852,batch000,ref22} --scratch DIR
 """
 import argparse
 import os
@@ -231,6 +234,16 @@ def cmd_index(args):
     return 1 if dups else 0
 
 
+def cmd_regress(args):
+    from . import regress
+    s = _settings(args, "settings")
+    scratch = Path(args.scratch)
+    rep = regress.run_regress(s, args.reference, scratch, log=_log)
+    print(rep.to_markdown(), end="")
+    print(f"written: {scratch / 'REGRESS.md'}\nwritten: {scratch / 'regress.json'}")
+    return 0 if rep.passed else 1
+
+
 # ---------------------------------------------------------------------------------- parser
 def build_parser():
     from .driver import STAGES
@@ -325,6 +338,13 @@ def build_parser():
 
     p = sub.add_parser("index", help="write index.csv and check (targetid, program) uniqueness")
     p.set_defaults(fn=cmd_index)
+
+    p = sub.add_parser("regress", help="rerun a reference in --scratch and compare it with the "
+                                       "committed regression manifest (1-ULP tolerance)")
+    p.add_argument("--reference", required=True, choices=("21852", "batch000", "ref22"))
+    p.add_argument("--scratch", required=True,
+                   help="empty or absent directory for the outputs, REGRESS.md and regress.json")
+    p.set_defaults(fn=cmd_regress)
     return ap
 
 
@@ -334,10 +354,11 @@ def main(argv=None):
     os.umask(0o002)
     from .claims import ClaimError
     from .driver import BatchError
+    from .regress import RegressError
     try:
         args = build_parser().parse_args(argv)
         return args.fn(args)
-    except (ClaimError, BatchError, config.CheckoutError) as exc:
+    except (ClaimError, BatchError, RegressError, config.CheckoutError) as exc:
         print(f"dgs: error: {exc}", file=sys.stderr, flush=True)
         return 1
 
