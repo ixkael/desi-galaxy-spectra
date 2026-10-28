@@ -111,3 +111,77 @@ def shard_dir(tmp_path):
     make_shard(tmp_path, 11, OBJS_A)
     make_shard(tmp_path, 12, OBJS_B)
     return tmp_path / "shards"
+
+
+# ------------------------------------------------------------------ batch-level fixtures
+CHUNK_Z = [0.05, 0.15, 0.25, 0.35, 0.45, 0.55, 0.65, 0.75, 0.85, 0.95, 1.05, 1.15, 1.3, 1.5]
+
+
+def batch_objs(tid_base, z_values=CHUNK_Z):
+    """One clean object in every redshift chunk below z = 1.6 (so 14 chunk files), plus one
+    unclean object that must never reach a chunk."""
+    objs = []
+    for k, z in enumerate(z_values):
+        cls = ("BGS", "ELG", "LRG")[k % 3]
+        objs.append((cls, tid_base + k, "bright" if cls == "BGS" else "dark", z, True))
+    objs.append(("BGS", tid_base + 99, "bright", 0.2, False))
+    return objs
+
+
+def _write_raw(raw_root, pix):
+    """Synthetic raw archive of one pixel: files, DESI-style .sha256sum, SHA256_OK marker."""
+    import hashlib
+    from desi_galaxy_spectra import config
+    for prog in config.PROGRAMS:
+        d = config.raw_dir(raw_root, pix, prog)
+        d.mkdir(parents=True, exist_ok=True)
+        names = {k: fn for p, k, fn, _ in config.pixel_urls(pix) if p == prog}
+        lines = []
+        for kind in ("coadd", "redrock"):
+            payload = f"{kind}-{prog}-{pix}".encode() * 10
+            (d / names[kind]).write_bytes(payload)
+            lines.append(f"{hashlib.sha256(payload).hexdigest()}  {names[kind]}\n")
+        (d / names["sha256sum"]).write_text("".join(lines))
+        (d / config.SHA_MARKER).write_text("ok\n")
+
+
+@pytest.fixture()
+def settings_tmp(tmp_path):
+    from desi_galaxy_spectra.settings import Settings
+    return Settings(raw_root=tmp_path / "raw", shard_root=tmp_path / "shards_root",
+                    batch_root=tmp_path / "out" / "batches", staging=tmp_path / "staging",
+                    workers=1, keep_raw_after_verify=True, keep_shards_after_verify=True,
+                    with_resolution=True)
+
+
+@pytest.fixture()
+def batch_factory(settings_tmp, tmp_path, monkeypatch):
+    """make(batch_id, pixels, tid_base, raw=True, shards=True): lists the pixels in a temporary
+    batch file (batches.BATCH_DIR is redirected), writes synthetic raw files and shards."""
+    import shutil
+    from desi_galaxy_spectra import batches, config
+    bdir = tmp_path / "batch_lists"
+    bdir.mkdir()
+    monkeypatch.setattr(batches, "BATCH_DIR", bdir)
+
+    def make(batch_id, pixels, tid_base=1000, raw=True, shards=True):
+        (bdir / f"batch_{batch_id}.txt").write_text("".join(f"{p}\n" for p in pixels))
+        sdir = settings_tmp.shard_root / f"batch_{batch_id}"
+        for i, pix in enumerate(pixels):
+            if raw:
+                _write_raw(settings_tmp.raw_root, pix)
+            if shards:
+                work = tmp_path / f"work_{batch_id}_{pix}"
+                work.mkdir()
+                sh, temp = make_shard(work, pix, batch_objs(tid_base + 100 * i))
+                sdir.mkdir(parents=True, exist_ok=True)
+                shutil.move(str(sh), sdir / config.shard_name(pix))
+                shutil.rmtree(work)
+        return batch_id
+
+    return make
+
+
+@pytest.fixture()
+def fake_batch(batch_factory):
+    return batch_factory("901", [21, 22])

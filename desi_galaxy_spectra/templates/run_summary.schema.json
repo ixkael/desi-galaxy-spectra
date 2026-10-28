@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "run_summary",
+  "description": "Machine-readable companion to RUN_SUMMARY.md. Engineer sessions write it; interpreter sessions read it. A value that could not be produced is the string 'not produced: <reason>'.",
+  "type": "object",
+  "required": ["run_id", "provenance", "model", "parameters", "diagnostics", "outputs", "status"],
+  "properties": {
+    "run_id": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+$"},
+    "profile": {"type": "string", "enum": ["engineer", "data_cleaning", "model_fitting", "bug_hunting", "figures"]},
+    "provenance": {
+      "type": "object",
+      "required": ["repo", "git_sha", "dirty", "command", "inputs"],
+      "properties": {
+        "repo": {"type": "string"},
+        "git_sha": {"type": "string"},
+        "dirty": {"type": "boolean"},
+        "command": {"type": "string"},
+        "machine": {"type": "string"},
+        "environment": {"type": "string"},
+        "seeds": {"type": "array", "items": {"type": "integer"}},
+        "wall_time_s": {"type": "number"},
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path"],
+            "properties": {
+              "path": {"type": "string"},
+              "rows": {"type": "integer"},
+              "bytes": {"type": "integer"},
+              "hash": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string"},
+        "config_path": {"type": "string"},
+        "n_free_parameters": {"type": "integer"},
+        "selection": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["cut", "rows_before", "rows_after"],
+            "properties": {
+              "cut": {"type": "string"},
+              "rows_before": {"type": "integer"},
+              "rows_after": {"type": "integer"},
+              "reference": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "value", "unit"],
+        "properties": {
+          "name": {"type": "string"},
+          "value": {"type": ["number", "string"]},
+          "uncertainty": {"type": ["number", "string", "array"]},
+          "unit": {"type": "string"},
+          "prior": {"type": "string"},
+          "at_bound": {"type": "boolean"}
+        }
+      }
+    },
+    "samples_path": {"type": "string"},
+    "diagnostics": {
+      "type": "object",
+      "description": "Physical diagnostics are required keys; ML metrics live only under 'secondary'.",
+      "required": ["chi2_reduced", "residuals", "pulls", "convergence"],
+      "properties": {
+        "chi2_reduced": {"type": ["number", "string"]},
+        "dof": {"type": "integer"},
+        "residuals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["variable", "max_binned_offset", "scatter"],
+            "properties": {
+              "variable": {"type": "string"},
+              "max_binned_offset": {"type": ["number", "string"]},
+              "scatter": {"type": ["number", "string"]},
+              "array_path": {"type": "string"}
+            }
+          }
+        },
+        "pulls": {
+          "type": "object",
+          "properties": {
+            "mean": {"type": ["number", "string"]},
+            "width": {"type": ["number", "string"]},
+            "tail_fraction_3sigma": {"type": ["number", "string"]}
+          }
+        },
+        "posterior_predictive": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "statistic": {"type": "string"},
+              "observed": {"type": ["number", "string"]},
+              "predicted": {"type": ["number", "string"]},
+              "p_value": {"type": ["number", "string"]}
+            }
+          }
+        },
+        "convergence": {
+          "type": "object",
+          "properties": {
+            "rhat_max": {"type": ["number", "string"]},
+            "ess_min": {"type": ["number", "string"]},
+            "acceptance": {"type": ["number", "string"]},
+            "converged": {"type": ["boolean", "string"]}
+          }
+        },
+        "physical_assertions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["assertion", "passed"],
+            "properties": {"assertion": {"type": "string"}, "passed": {"type": "boolean"}}
+          }
+        },
+        "secondary": {
+          "type": "object",
+          "description": "loss, rmse, accuracy, auc, ... never headline numbers",
+          "additionalProperties": {"type": ["number", "string"]}
+        }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "description"],
+        "properties": {
+          "path": {"type": "string"},
+          "description": {"type": "string"},
+          "kind": {"type": "string", "enum": ["table", "samples", "residuals", "figure", "model", "log", "other"]}
+        }
+      }
+    },
+    "status": {
+      "type": "object",
+      "required": ["gates_passed", "gates_failed"],
+      "properties": {
+        "gates_passed": {"type": "array", "items": {"type": "string"}},
+        "gates_failed": {"type": "array", "items": {"type": "string"}},
+        "change_log": {"type": "array", "items": {"type": "string"}},
+        "blockers": {"type": "array", "items": {"type": "string"}},
+        "needs_decision": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "interpreted_in": {"type": "string", "description": "Path of the interpreter report, filled in later; absent means not yet interpreted."}
+  }
+}
