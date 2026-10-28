@@ -1,0 +1,30 @@
+{
+ "files": {
+  "coadd-main-bright-21852.fits": {
+   "archive_path": "bright/218/21852/coadd-main-bright-21852.fits",
+   "bytes": 809763840,
+   "matches_desi_sha256sum": true,
+   "sha256": "e7fc7798c3dc802fdbcd11a1117cf72584add20dd176485a77438b5eddc95ada"
+  },
+  "coadd-main-dark-21852.fits": {
+   "archive_path": "dark/218/21852/coadd-main-dark-21852.fits",
+   "bytes": 1185212160,
+   "matches_desi_sha256sum": true,
+   "sha256": "45d5a28f5e6e1c4c5c9ce11a625503c8f9f49cc0196ab94b500b5a5e0076e413"
+  },
+  "redrock-main-bright-21852.fits": {
+   "archive_path": "bright/218/21852/redrock-main-bright-21852.fits",
+   "bytes": 1474560,
+   "matches_desi_sha256sum": true,
+   "sha256": "78a6f1c01e58b19067f3763f90002c3fa91b61e6c1e87dcdd6bd9a434fbba57b"
+  },
+  "redrock-main-dark-21852.fits": {
+   "archive_path": "dark/218/21852/redrock-main-dark-21852.fits",
+   "bytes": 2234880,
+   "matches_desi_sha256sum": true,
+   "sha256": "dd587979490cf66f2187ad534cbb086fcf1d4192dfd7465b53359ac3c415b868"
+  }
+ },
+ "healpix": 21852,
+ "source": "DESI DR1 iron healpix/main, public archive; sha256 checked against redux_iron_healpix_main_<prog>_218_21852.sha256sum"
+}
