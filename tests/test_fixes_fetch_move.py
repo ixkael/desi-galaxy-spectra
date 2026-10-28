@@ -6,7 +6,7 @@ from pathlib import Path
 import h5py
 import pytest
 
-from desi_galaxy_spectra import config, fetch, shard
+from desi_galaxy_spectra import cli, config, fetch, shard
 from desi_galaxy_spectra.fetch import FetchError, Fetcher, dest_verified
 from test_fetch_dryrun import FakeSession, Resp, pixel_files
 
@@ -197,6 +197,24 @@ def test_raw_root_mode_does_not_trust_marker_alone(tmp_path):
     hashes[str(coadds["dark"])] = "0" * 64
     with pytest.raises(shard.ShardError, match="SHA256"):
         shard.check_inputs_against_sha256sum(PIX, coadds, reds, hashes)
+
+
+# ------------------------------------------------------------------------------------- S2
+def test_fetch_requires_raw_root(tmp_path, env, monkeypatch):
+    monkeypatch.delenv("DGS_SETTINGS", raising=False)
+    monkeypatch.chdir(tmp_path)                                  # no settings.toml here
+    # no --raw-root and no usable settings: refused, naming the option
+    with pytest.raises(SystemExit) as e:
+        cli.main(["extract", "--pixel", "1", "--shard-dir", str(tmp_path / "s"), "--fetch"])
+    assert "--raw-root" in str(e.value)
+    # an empty --raw-root would mean the current directory: refused too
+    with pytest.raises(SystemExit) as e:
+        cli.main(["extract", "--pixel", "1", "--shard-dir", str(tmp_path / "s"), "--fetch",
+                  "--raw-root", ""])
+    assert "--raw-root" in str(e.value)
+    env.job["raw_root"] = ""
+    with pytest.raises(shard.ShardError, match="--raw-root"):
+        env.run()
 
 
 # ------------------------------------------------------------------------------------- S3

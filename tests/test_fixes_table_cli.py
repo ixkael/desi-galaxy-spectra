@@ -1,10 +1,15 @@
 """Fix session 2026-10-23: B2 (per-shard table), S1 (failed pixel stops a parallel run), S7."""
+import json
+import os
+import time
+from pathlib import Path
+
 import h5py
 import numpy as np
 import pytest
 
 from conftest import OBJS_A, OBJS_B, make_shard
-from desi_galaxy_spectra import manifest, package, verify
+from desi_galaxy_spectra import cli, manifest, package, verify
 
 F01 = "desi_dr1_clean_galaxies_z0.10-0.20.h5"
 OBJS_C = [("ELG", 400, "dark", 0.15, True), ("LRG", 410, "dark", 0.15, True)]     # no BGS
@@ -130,3 +135,43 @@ def test_verify_fails_without_shards_unless_opted_out(shard_dir, tmp_path):
     assert not rep.ok and "--no-shards" in rep.text()
     rep = verify.verify(out, man, no_shards=True, log=lambda m: None)
     assert rep.ok and "--no-shards given" in rep.text()
+    assert cli.main(["verify", "--target", str(out), "--manifest", str(man)]) == 1
+    assert cli.main(["verify", "--target", str(out), "--manifest", str(man), "--no-shards"]) == 0
+    assert cli.main(["verify", "--target", str(out), "--manifest", str(man), "--shard-dir",
+                     str(shard_dir)]) == 0
+
+
+# ------------------------------------------------------------------------------------- S1
+def fake_runner(job):
+    """Module-level so a process pool can pickle it.  Pixel 1 fails at once; others are slow."""
+    Path(job["marks"], f"started_{job['pix']}").write_text("x")
+    if job["pix"] == 1:
+        raise RuntimeError("pixel 1 exploded")
+    time.sleep(0.6)
+    return {"healpix": job["pix"], "n_objects": 1, "seconds_total": 0.6}
+
+
+def test_failed_pixel_stops_parallel_run_and_is_logged(tmp_path):
+    marks = tmp_path / "marks"
+    marks.mkdir()
+    jobs = [dict(pix=p, marks=str(marks)) for p in range(1, 13)]
+    logf = tmp_path / "extract_log.jsonl"
+    failures = cli.run_jobs(jobs, 2, logf, fake_runner, mp_method="fork")
+    assert failures and failures[0][0] == 1 and "exploded" in failures[0][1]
+    recs = [json.loads(line) for line in logf.read_text().splitlines()]
+    err = [r for r in recs if "error" in r]
+    assert len(err) == 1 and err[0]["healpix"] == 1 and "traceback" in err[0]
+    started = {int(p.name.split("_")[1]) for p in marks.iterdir()}
+    assert 12 not in started and len(started) < 12                  # pending jobs were cancelled
+    # every job that did start is accounted for in the log (result, error or cancellation)
+    assert started <= {r["healpix"] for r in recs}
+
+
+def test_serial_failure_is_recorded_and_stops(tmp_path):
+    marks = tmp_path / "m"
+    marks.mkdir()
+    logf = tmp_path / "log.jsonl"
+    jobs = [dict(pix=p, marks=str(marks)) for p in (1, 2, 3)]
+    failures = cli.run_jobs(jobs, 1, logf, fake_runner)
+    assert [p for p, _ in failures] == [1] and sorted(os.listdir(marks)) == ["started_1"]
+    assert "error" in json.loads(logf.read_text().splitlines()[0])
