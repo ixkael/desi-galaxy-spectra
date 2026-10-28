@@ -1,7 +1,6 @@
 # Run summary: 2026-10-23-desi-pixel-list
 
-Written by the engineer role. Facts and diagnostics only. Step 1 of
-`plans/2026-10-22-desi-more-data.md`. A field that could not be produced says
+Written by the author of the run. Facts and diagnostics only. A field that could not be produced says
 `not produced: <reason>`.
 
 ## Provenance

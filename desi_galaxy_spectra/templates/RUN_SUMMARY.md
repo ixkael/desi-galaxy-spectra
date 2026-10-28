@@ -1,7 +1,7 @@
 # Run summary: <run id = YYYY-MM-DD-slug>
 
-Written by the engineer role. Facts and diagnostics only; interpretation happens in a
-separate session that reads this file. A field that could not be produced says
+Written by the author of the run. Facts and diagnostics only; interpretation belongs in a
+separate document that reads this file. A field that could not be produced says
 `not produced: <reason>` — never an estimate.
 
 ## Provenance
@@ -56,4 +56,4 @@ Figures (diagnostic only): `<path>` — `<what is plotted>` …
 
 ## Not interpreted
 No physical conclusion is drawn here. Interpretation: `reports/<date>-<topic>.md`
-(interpreter session), if and when written.
+(later analysis), if and when written.

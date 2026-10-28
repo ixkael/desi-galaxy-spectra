@@ -27,16 +27,17 @@ jobs:
 
       - uses: astral-sh/setup-uv@v5
         with:
+          version: "0.11.15"
           python-version: "3.10"
 
       - name: Install the locked environment
         run: uv sync --frozen
 
       - name: Tests
-        run: uv run pytest -q
+        run: uv run --frozen pytest -q
 
       - name: Lint
-        run: uv run ruff check
+        run: uv run --frozen ruff check
 
       - name: Hygiene grep
         run: bash tools/hygiene_grep.sh

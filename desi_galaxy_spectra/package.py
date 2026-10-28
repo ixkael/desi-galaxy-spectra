@@ -253,7 +253,7 @@ def write_chunk(ss, idx, name, lo, hi, out_dir, with_resolution, manifest_md5, l
         out.create_dataset("wavelength", data=ss.wave)
         out["wavelength"].attrs["units"] = "Angstrom (vacuum, solar-system barycentric)"
         # source_metadata keeps only values identical in every source shard; the per-shard values
-        # (all of them) live in source_shard_table/ (PI ruling 2026-10-23)
+        # (all of them) live in source_shard_table/
         sm = out.create_group("source_metadata")
         for k, v in common_attrs([dict(f["metadata"].attrs) for f in ss.f]).items():
             sm.attrs[k] = v

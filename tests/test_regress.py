@@ -324,8 +324,8 @@ def test_compare_refuses_reference_with_other_exclusion_rules(synthetic_chunks):
 # --------------------------------------------------------------------------- run_regress
 def test_run_regress_missing_reference_json_is_a_hard_error(settings_tmp, tmp_path, monkeypatch):
     monkeypatch.setattr(regress, "REGRESS_DIR", tmp_path / "no_regress")
-    for name, task in (("21852", "Task 12"), ("batch000", "Task 13"), ("ref22", "Task 14")):
-        with pytest.raises(RegressError, match=task):
+    for name in ("21852", "batch000", "ref22"):
+        with pytest.raises(RegressError, match=f"the {name} regression reference has not been"):
             regress.run_regress(settings_tmp, name, tmp_path / f"scratch_{name}", **quiet)
     with pytest.raises(ValueError):
         regress.run_regress(settings_tmp, "pixel21852", tmp_path / "s", **quiet)
@@ -404,9 +404,9 @@ def test_cli_regress_exit_code(settings_tmp, tmp_path, monkeypatch, capsys):
                   "--scratch", str(tmp_path / "s3")])
 
     def boom(s, reference, scratch, log=print):
-        raise RegressError("reference/regress/pixel21852.json is missing (Task 12)")
+        raise RegressError("reference/regress/pixel21852.json is missing")
 
     monkeypatch.setattr(regress, "run_regress", boom)
     assert cli.main(["--settings", str(cfgp), "regress", "--reference", "21852",
                      "--scratch", str(tmp_path / "s4")]) == 1
-    assert "Task 12" in capsys.readouterr().err
+    assert "pixel21852.json is missing" in capsys.readouterr().err

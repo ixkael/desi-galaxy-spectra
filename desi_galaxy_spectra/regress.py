@@ -13,8 +13,8 @@ else) or ``"provenance"`` (a dataset of ``PROVENANCE_DATASETS``: its value is ne
 Path-valued items (``PATH_DATASETS``, ``PATH_ATTRS``) store the md5 of their basenames only.
 ``excluded`` holds the exclusion rules the manifest was built with, each with its reason.
 
-``compare`` checks a target directory against a reference manifest under the criterion of the
-build plan (PI 2026-10-27): file and dataset sets, dtypes, shapes, integer / boolean / string
+``compare`` checks a target directory against a reference manifest under the following
+criterion: file and dataset sets, dtypes, shapes, integer / boolean / string
 datasets and all non-provenance attributes exact; a float dataset whose md5 differs is compared
 element by element with the reference arrays and passes if every element is within 1 ULP of the
 stored dtype; NaN must match NaN bit for bit; anything else fails.
@@ -70,7 +70,6 @@ PATH_REASON = ("path of a raw file: the directory depends on the machine, so onl
 ULP_TOLERANCE = 1
 
 REFERENCE_STEMS = {"21852": "pixel21852", "batch000": "batch000", "ref22": "ref22"}
-REFERENCE_TASKS = {"pixel21852": "Task 12", "batch000": "Task 13", "ref22": "Task 14"}
 BATCH_OF_REFERENCE = {"batch000": "000", "ref22": "ref22"}
 REGRESS_DIR = config.REPO_ROOT / "reference" / "regress"
 PIXEL_21852 = 21852
@@ -418,10 +417,9 @@ def reference_json(reference: str) -> Path:
 def load_reference(reference: str) -> dict:
     p = reference_json(reference)
     if not p.is_file():
-        stem = REFERENCE_STEMS[reference]
-        raise RegressError(f"{p} does not exist: the {reference} regression reference is built "
-                           f"in {REFERENCE_TASKS[stem]} of the build plan; there is nothing to "
-                           f"compare against until it is committed")
+        raise RegressError(f"{p} does not exist: the {reference} regression reference has not "
+                           f"been generated or committed; there is nothing to compare against "
+                           f"until it is")
     return json.loads(p.read_text())
 
 

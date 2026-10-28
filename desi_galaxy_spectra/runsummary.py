@@ -153,7 +153,7 @@ def write_run_summary(s: Settings, batch_id: str, timings: dict[str, float]) -> 
 
     # ------------------------------------------------------------------ markdown
     L = [f"# Run summary: {run_id}", "",
-         "Written by the engineer role. Facts and diagnostics only; no interpretation. Fetch, "
+         "Written by the author of the run. Facts and diagnostics only; no interpretation. Fetch, "
          "extraction, per-pixel shards and redshift-chunk packaging of one fixed batch of "
          f"HEALPix pixels (batch {batch_id}, {len(pixels)} pixels). Status: "
          f"{'DONE' if not failed else 'FAILED'}.", "",

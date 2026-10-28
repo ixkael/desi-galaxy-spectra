@@ -1,8 +1,8 @@
 # Changelog
 
-## 1.0.0
+## v1.0.0-pre1
 
-First public release.
+First public pre-release, in preparation for 1.0.0 (the package version is already 1.0.0).
 
 - `dgs` command line: `fetch`, `extract`, `package`, `manifest`, `verify`, `run`, `claim`,
   `release`, `next`, `status`, `doctor`, `deliver`, `index`, `regress`.

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "run_summary",
-  "description": "Machine-readable companion to RUN_SUMMARY.md. Engineer sessions write it; interpreter sessions read it. A value that could not be produced is the string 'not produced: <reason>'.",
+  "description": "Machine-readable companion to RUN_SUMMARY.md. The author of the run writes it; later analysis reads it. A value that could not be produced is the string 'not produced: <reason>'.",
   "type": "object",
   "required": ["run_id", "provenance", "model", "parameters", "diagnostics", "outputs", "status"],
   "properties": {
@@ -159,6 +159,6 @@
         "needs_decision": {"type": "array", "items": {"type": "string"}}
       }
     },
-    "interpreted_in": {"type": "string", "description": "Path of the interpreter report, filled in later; absent means not yet interpreted."}
+    "interpreted_in": {"type": "string", "description": "Path of the later analysis report, filled in afterwards; absent means not yet interpreted."}
   }
 }

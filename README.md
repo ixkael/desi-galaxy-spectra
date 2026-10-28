@@ -25,11 +25,13 @@ batch lists (`batches/`), the lockfile (`uv.lock`, `requirements.lock.txt`) and 
 (`reference/`, `pixel_lists/`) are repository data that the code reads from the checkout, and a
 wheel does not carry them.
 
-Python is 3.10 or 3.11. The environment is locked for Linux x86_64, Linux aarch64 and macOS
-arm64. On aarch64 the `fitsio` 1.4.2 package is built from source, which needs a C compiler and
+Python is 3.10 or 3.11; the committed `.python-version` selects 3.10, the interpreter the
+regression references were made with. The environment is locked for Linux x86_64, Linux aarch64
+and macOS arm64. On aarch64 the `fitsio` 1.4.2 package is built from source, which needs a C compiler and
 the curl, zlib and bzip2 development headers (the CI workflow shows the Debian packages).
-Floating-point results on aarch64 agree with x86_64 to within one unit in the last place; the
-verification tolerances allow for that.
+Floating-point results on aarch64 are expected to agree with x86_64 to within one unit in the
+last place; `dgs regress` compares against the x86_64 references with that tolerance (the
+aarch64 comparison is part of the cluster regression and is not yet reported here).
 
 ## Settings
 
@@ -54,7 +56,7 @@ an unset variable is an error.
 
 ## Output format and selection
 
-An object is kept when it passes all of these (design decision 2 of the build):
+An object is kept when it passes all of these (the object-selection rule):
 
 - it is in the DESI DR1 main survey, in either the bright or the dark programme;
 - its class is read from the `DESI_TARGET` bits with priority LRG, then ELG, then BGS;

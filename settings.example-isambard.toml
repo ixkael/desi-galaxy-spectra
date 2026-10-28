@@ -10,7 +10,7 @@ shard_root = "$DGS_TREE/shards"
 batch_root = "$DGS_TREE/batches"
 # Node-local or fast scratch: streaming downloads and temporary files.
 staging = "$DGS_TREE/staging"
-# The Block B regression references (reference/regress/<stem>.json and the arrays under
+# The regression references (reference/regress/<stem>.json and the arrays under
 # <reference_root>/<stem>/); only `dgs regress` needs them.
 reference_root = "$DGS_TREE/reference"
 
