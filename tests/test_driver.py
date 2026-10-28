@@ -202,8 +202,10 @@ def test_run_summary_is_complete_and_honest(settings_tmp, fake_batch):
     assert "not produced" in text and "VERIFY PASSED" in text
     # (the command line and host name are runtime facts of whoever ran it, so only the strings
     # that could come from the source tree are checked here; the sources are scanned below)
+    body = "\n".join(ln for ln in text.splitlines() if not ln.startswith("| Command |"))
+    body = body.replace(str(settings_tmp.raw_root.parent), "<tmp>")    # pytest's temp tree
     for bad in PRIVATE[:3]:
-        assert bad not in text
+        assert bad not in body
     # fields the run cannot supply are labelled, not invented: this batch was built from ready
     # shards, so the extraction log has no record of its pixels
     assert "extract_log.jsonl has no record of the shards of this batch" in text
