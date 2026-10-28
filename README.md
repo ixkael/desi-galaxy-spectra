@@ -74,6 +74,14 @@ object has no file), `manifest.json`, `MD5SUMS.txt`, `VERIFY.md`, `RUN_SUMMARY.m
 `run_summary.json`, `status.json` and a `README.md` describing the layout of the chunk files and
 how to read them with `h5py`.
 
+In a chunk file, `source_metadata` holds only the attributes whose value is the same in every
+per-pixel shard the chunk was built from, and each value is a per-shard value: for example
+`n_coadds_processed = 2` means each source shard processed two coadds (bright and dark), not
+that the whole chunk came from two coadds. The values of every shard, including those that
+differ between shards, are in `source_shard_table/`, one row per shard; so are the per-class
+counts (`n_objects`, `n_clean_galaxy`, `median_snr`, …), which therefore are not class-group
+attributes.
+
 ## Thin redshift chunks
 
 A batch holds about 100 pixels, drawn at random from the eligible pixels, and the 15 redshift
