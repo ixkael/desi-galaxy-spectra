@@ -25,8 +25,18 @@ def test_status_table_and_files(settings_tmp, batch_factory):
     tsv, md = write_status(settings_tmp, ids=[a, b, c])
     assert tsv == settings_tmp.batch_root.parent / "status.tsv" and md.name == "status.md"
     lines = tsv.read_text().splitlines()
-    assert lines[0].split("\t") == ["batch", "stage", "claimed_by", "n_pixels", "n_clean", "bytes"]
-    assert len(lines) == 4 and "alice" in md.read_text()
+    assert lines[0].startswith("# stage check: size-only") and "deep=True" in lines[0]
+    assert lines[1].split("\t") == ["batch", "stage", "claimed_by", "n_pixels", "n_clean", "bytes"]
+    assert len(lines) == 5 and "alice" in md.read_text()
+    assert "not re-hashed" in md.read_text()
+
+
+def test_status_tsv_states_a_deep_check(settings_tmp, batch_factory):
+    a = batch_factory("913", [75], tid_base=150000)
+    run_batch(settings_tmp, a, **quiet)
+    tsv, md = write_status(settings_tmp, ids=[a], deep=True)
+    assert tsv.read_text().splitlines()[0].startswith("# stage check: md5 recheck")
+    assert "re-hashed" in md.read_text() and "not re-hashed" not in md.read_text()
 
 
 def test_check_unique_flags_cross_batch_duplicate(settings_tmp, batch_factory):
@@ -40,6 +50,24 @@ def test_check_unique_flags_cross_batch_duplicate(settings_tmp, batch_factory):
     dup = check_unique(settings_tmp)
     assert dup and any("300000" in m for m in dup)
     assert any("batch_920" in m and "batch_922" in m for m in dup)
+
+
+def test_index_and_unique_cover_only_verified_batches(settings_tmp, batch_factory):
+    good = batch_factory("940", [101], tid_base=600000)
+    failed = batch_factory("941", [102], tid_base=700000)
+    noverify = batch_factory("942", [103], tid_base=800000)
+    dup = batch_factory("943", [104], tid_base=600000)      # duplicates batch 940, but FAILed
+    for b in (good, failed, noverify, dup):
+        run_batch(settings_tmp, b, **quiet)
+    out = settings_tmp.batch_root
+    (out / "batch_941" / "VERIFY.md").write_text("RESULT: FAIL\n")
+    (out / "batch_942" / "VERIFY.md").unlink()
+    (out / "batch_943" / "VERIFY.md").write_text("RESULT: FAIL\n")
+    for b in (failed, noverify, dup):
+        assert (out / f"batch_{b}" / "MD5SUMS.txt").is_file()
+    rows = [r.split(",") for r in build_index(settings_tmp).read_text().splitlines()[1:]]
+    assert rows and {r[0] for r in rows} == {"940"}
+    assert check_unique(settings_tmp) == []                  # the duplicate sits in an unverified batch
 
 
 def test_index_columns_match_md5sums(settings_tmp, batch_factory):

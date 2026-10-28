@@ -9,21 +9,29 @@ import numpy as np
 
 from . import manifest
 from .settings import Settings
-from .status import CLASS_NAMES, parse_md5sums
+from .status import CLASS_NAMES, parse_md5sums, stage_on_disk
 
 INDEX_COLUMNS = ("batch", "file", "n_BGS", "n_ELG", "n_LRG", "bytes", "md5")
 
 
 def _batch_dirs(s: Settings) -> list[Path]:
+    """Output directories of the batches that are verified or delivered (stage read from the
+    files; chunk sizes against VERIFY.md, not re-hashed).  Batches that failed verification or
+    have not been verified have chunk files and an MD5SUMS.txt but belong in neither the index
+    nor the uniqueness check."""
     root = Path(s.batch_root)
-    return sorted(p for p in root.glob("batch_*") if p.is_dir()) if root.is_dir() else []
+    if not root.is_dir():
+        return []
+    dirs = sorted(p for p in root.glob("batch_*") if p.is_dir())
+    return [p for p in dirs
+            if stage_on_disk(s, p.name[len("batch_"):], deep=False) in ("verified", "delivered")]
 
 
 def build_index(s: Settings) -> Path:
     """Write ``index.csv`` (batch, file, n_BGS, n_ELG, n_LRG, bytes, md5) next to the batch root.
 
-    One row per chunk file of every batch that has an ``MD5SUMS.txt``; the md5 is the one
-    recorded there.  A chunk file absent because its redshift range is empty has no row.
+    One row per chunk file of every verified or delivered batch; the md5 is the one recorded in
+    its ``MD5SUMS.txt``.  A chunk file absent because its redshift range is empty has no row.
     """
     base = Path(s.batch_root).parent
     base.mkdir(parents=True, exist_ok=True)
@@ -50,7 +58,7 @@ def build_index(s: Settings) -> Path:
 
 def check_unique(s: Settings) -> list[str]:
     """Messages for every (targetid, program) that occurs more than once across all chunk files
-    of all batches (empty list: all unique).  Only ``catalog/targetid`` and ``catalog/program``
+    of all verified or delivered batches (empty list: all unique).  Only ``catalog/targetid`` and ``catalog/program``
     of each class group are read."""
     tids, progs, where = [], [], []
     names: list[str] = []

@@ -103,6 +103,45 @@ def test_queued_batch_needs_fetch(settings_tmp, batch_factory):
         run_batch(settings_tmp, bid, fetch=False, **quiet)
 
 
+def test_corrupt_status_json_is_a_hard_error(settings_tmp, fake_batch):
+    run_batch(settings_tmp, fake_batch, **quiet)
+    _, out = batch_dirs(settings_tmp, fake_batch)
+    (out / "status.json").write_text("{not json")
+    with pytest.raises(BatchError, match="status.json"):
+        run_batch(settings_tmp, fake_batch, **quiet)
+    (out / "status.json").unlink()                       # an absent file is fine
+    assert run_batch(settings_tmp, fake_batch, **quiet) == "verified"
+
+
+def test_fetch_that_leaves_no_marker_is_a_hard_error(settings_tmp, batch_factory, monkeypatch):
+    bid = batch_factory("906", [62], raw=False, shards=False)
+    calls = []
+
+    class SilentFetcher:
+        def fetch_pixel(self, pix, root, log=print, progs=None):
+            calls.append(pix)          # returns as if done, but writes no SHA256_OK marker
+
+    monkeypatch.setattr("desi_galaxy_spectra.driver.Fetcher", SilentFetcher)
+    with pytest.raises(BatchError, match="fetch finished.*62.*SHA256_OK"):
+        run_batch(settings_tmp, bid, fetch=True, **quiet)
+    assert calls == [62] and stage_on_disk(settings_tmp, bid) == "queued"
+
+
+def test_fetch_missing_one_programme_marker_is_a_hard_error(settings_tmp, batch_factory,
+                                                           monkeypatch):
+    bid = batch_factory("907", [63], raw=False, shards=False)
+
+    class HalfFetcher:
+        def fetch_pixel(self, pix, root, log=print, progs=None):
+            d = config.raw_dir(root, pix, "bright")
+            d.mkdir(parents=True)
+            (d / config.SHA_MARKER).write_text("ok\n")     # the dark programme gets nothing
+
+    monkeypatch.setattr("desi_galaxy_spectra.driver.Fetcher", HalfFetcher)
+    with pytest.raises(BatchError, match="fetch finished.*63.*dark"):
+        run_batch(settings_tmp, bid, fetch=True, **quiet)
+
+
 def test_raw_deleted_only_after_verify_when_switch_off(settings_tmp, fake_batch):
     import dataclasses
     s = dataclasses.replace(settings_tmp, keep_raw_after_verify=False,

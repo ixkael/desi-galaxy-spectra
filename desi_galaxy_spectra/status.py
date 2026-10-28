@@ -178,12 +178,15 @@ def _atomic_write(path: Path, text: str) -> None:
 
 
 def write_status(s: Settings, ids: list[str] | None = None, deep: bool = False) -> tuple[Path, Path]:
-    """Write ``status.tsv`` and ``status.md`` next to the batch root."""
+    """Write ``status.tsv`` and ``status.md`` next to the batch root.  The first line of the tsv
+    is a ``#`` comment stating the depth of the stage check (size-only or md5 recheck)."""
     rows = status_table(s, ids, deep=deep)
     base = Path(s.batch_root).parent
     base.mkdir(parents=True, exist_ok=True)
     tsv, md = base / "status.tsv", base / "status.md"
-    _atomic_write(tsv, "\t".join(COLUMNS) + "\n"
+    depth = ("md5 recheck of the chunk files" if deep else
+             "size-only (use --deep / deep=True for md5 recheck)")
+    _atomic_write(tsv, f"# stage check: {depth}\n" + "\t".join(COLUMNS) + "\n"
                   + "".join("\t".join(_cell(r[c]) for c in COLUMNS) + "\n" for r in rows))
     counts = {st: sum(1 for r in rows if r["stage"] == st) for st in STAGES}
     lines = ["# Batch status", "",

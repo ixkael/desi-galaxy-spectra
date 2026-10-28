@@ -127,6 +127,12 @@ def _step_downloaded(s, bid, pixels, shard_dir, out, fetch, log):
     for pix in todo:
         log(f"pixel {pix}")
         f.fetch_pixel(pix, s.raw_root, log=log)
+        absent = [prog for prog in config.PROGRAMS
+                  if not (config.raw_dir(s.raw_root, pix, prog) / config.SHA_MARKER).is_file()]
+        if absent:
+            raise BatchError(f"batch {bid}: fetch finished for pixel {pix} but the "
+                             f"{config.SHA_MARKER} marker is missing for programme(s) "
+                             f"{', '.join(absent)}")
     return {}
 
 
@@ -208,13 +214,19 @@ _STEPS = {"downloaded": ("fetch", _step_downloaded), "extracted": ("extract", _s
 
 # --------------------------------------------------------------------- status and retention
 def _load_status(out: Path) -> dict:
+    """The previous status.json (empty if there is none).  A file that cannot be parsed is a hard
+    error: it is never replaced silently, since its timings and retention actions would be lost."""
     p = out / "status.json"
-    if p.is_file():
-        try:
-            return json.loads(p.read_text())
-        except ValueError:
-            return {}
-    return {}
+    if not p.is_file():
+        return {}
+    try:
+        st = json.loads(p.read_text())
+    except ValueError as exc:
+        raise BatchError(f"{p} is not valid JSON ({exc}); inspect it, then delete it to let the "
+                         "driver write a fresh one") from exc
+    if not isinstance(st, dict):
+        raise BatchError(f"{p} does not hold a JSON object; inspect it, then delete it")
+    return st
 
 
 def _write_status(s, bid, pixels, shard_dir, out, stage, prev, seconds, stamps,
