@@ -13,7 +13,13 @@ from pathlib import Path
 
 import numpy as np
 
-from .config import PIXEL_LISTS, PIXEL_TABLE_CSV, REPO_ROOT, read_pixel_list
+from .config import (
+    PIXEL_LISTS,
+    PIXEL_TABLE_CSV,
+    REPO_ROOT,
+    read_pixel_list,
+    require_checkout,
+)
 
 BATCH_DIR = REPO_ROOT / "batches"
 N_NUMBERED = 84          # 000 (drawn) + 83 permuted splits
@@ -29,6 +35,7 @@ def batch_ids(include_ref22: bool = True) -> list[str]:
 
 
 def read_batch(batch_id: str) -> list[int]:
+    require_checkout()
     return read_pixel_list(BATCH_DIR / f"batch_{batch_id}.txt")
 
 

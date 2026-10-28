@@ -149,3 +149,93 @@ def test_cli_sets_umask_and_thread_caps(settings_tmp, tmp_path, monkeypatch, cap
     assert mask == 0o002
     assert all(os.environ[k] == "1" for k in cli.THREAD_VARS)
     assert capsys.readouterr().out.strip() == "000"
+
+
+# ------------------------------------------------------------------- fix round 1
+def _bad_claim(s, batch_id, content):
+    p = claims.claim_path(s, batch_id)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_bytes(content)
+    return p
+
+
+@pytest.mark.parametrize("content", [b"", b"{not json", b"[1, 2]", b"\xff\xfe"])
+def test_force_release_clears_unreadable_claim(settings_tmp, monkeypatch, content):
+    _as(monkeypatch, "a")
+    p = _bad_claim(settings_tmp, "005", content)
+    with pytest.raises(ClaimError, match="release --force"):
+        claims.release(settings_tmp, "005", log=lambda m: None)         # hard error stays hard
+    with pytest.raises(ClaimError):
+        claims.require_own_claim(settings_tmp, "005")
+    assert p.exists()
+    claims.release(settings_tmp, "005", force=True, log=lambda m: None)
+    assert not p.exists() and claims.read_claim(settings_tmp, "005") is None
+    lines = (settings_tmp.batch_root / "claims.log").read_text().splitlines()
+    assert len(lines) == 1 and "forced release by a" in lines[0]
+    assert "UNREADABLE" in lines[0] and repr(content) in lines[0]
+    claims.claim(settings_tmp, "005")                                    # free again
+
+
+def test_next_unclaimed_survives_unreadable_claim(settings_tmp, capsys):
+    _bad_claim(settings_tmp, "000", b"")
+    assert claims.next_unclaimed(settings_tmp) == "001"                  # 000 not offered
+    err = capsys.readouterr().err
+    assert "batch 000" in err and str(claims.claim_path(settings_tmp, "000")) in err
+
+
+def test_claim_is_atomic_leaves_no_temp_and_loses_to_existing(settings_tmp, monkeypatch):
+    old = os.umask(0o002)
+    try:
+        claims.claim(settings_tmp, "006")
+    finally:
+        os.umask(old)
+    d = claims.claim_path(settings_tmp, "006").parent
+    assert [x.name for x in d.iterdir()] == ["CLAIM"]                    # no temp file left
+    assert set(json.loads((d / "CLAIM").read_text())) == {"user", "host", "slurm_job_id", "time"}
+    before = (d / "CLAIM").read_bytes()
+    _as(monkeypatch, "b")
+    with pytest.raises(ClaimError, match="already claimed by"):
+        claims.claim(settings_tmp, "006")
+    assert [x.name for x in d.iterdir()] == ["CLAIM"]                    # temp removed on failure
+    assert (d / "CLAIM").read_bytes() == before                          # the first claim stands
+
+
+def test_doctor_lists_unreadable_claim(settings_tmp):
+    _tidy(settings_tmp)
+    _bad_claim(settings_tmp, "007", b"")
+    found = claims.doctor(settings_tmp)
+    assert any("unreadable claim" in m and "batch_007" in m and "release --force" in m
+               for m in found)
+
+
+@pytest.mark.skipif(not hasattr(os, "geteuid") or os.geteuid() == 0,
+                    reason="root can read mode-000 directories")
+def test_doctor_reports_unreadable_directory(settings_tmp):
+    _tidy(settings_tmp)
+    locked = settings_tmp.shard_root / "locked"
+    (locked / "inner").mkdir(parents=True)
+    os.chmod(locked, 0o2775)
+    os.chmod(locked, 0)
+    try:
+        found = claims.doctor(settings_tmp)
+    finally:
+        os.chmod(locked, 0o2775)
+    assert any(m.startswith(f"{locked}: unreadable") for m in found), found
+
+
+def test_checkout_check_names_missing_path(tmp_path, monkeypatch, capsys):
+    from desi_galaxy_spectra import batches, config
+    config.require_checkout()                                            # this checkout is fine
+    monkeypatch.setattr(config, "REPO_ROOT", tmp_path)                   # no batches/ here
+    with pytest.raises(config.CheckoutError, match="repository checkout.*uv sync") as ei:
+        config.require_checkout()
+    assert str(tmp_path / "batches") in str(ei.value)
+    with pytest.raises(config.CheckoutError):
+        batches.read_batch("000")
+    assert cli.main(["claim", "--batch", "000"]) == 1                    # not "unknown batch"
+    err = capsys.readouterr().err
+    assert "uv sync" in err and "unknown batch" not in err
+    (tmp_path / "batches").mkdir()
+    monkeypatch.setattr(config, "LOCKFILE", tmp_path / "requirements.lock.txt")
+    with pytest.raises(config.CheckoutError, match="requirements.lock.txt"):
+        config.lockfile_sha256()                                         # not FileNotFoundError

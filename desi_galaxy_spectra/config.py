@@ -73,7 +73,23 @@ def shard_name(pix: int) -> str:
     return f"healpix_{int(pix)}.h5"
 
 
+class CheckoutError(RuntimeError):
+    """The package is not running from a repository checkout."""
+
+
+def require_checkout() -> None:
+    """The batch lists and the lockfile live in the repository checkout, not in the installed
+    package.  Raise CheckoutError, naming the missing path, when either is absent."""
+    for path in (REPO_ROOT / "batches", LOCKFILE):
+        if not path.exists():
+            raise CheckoutError(
+                f"{path} does not exist: desi-galaxy-spectra must be run from a repository "
+                f"checkout installed with `uv sync` (the batch lists and the lockfile are read "
+                f"from the checkout, not from an installed copy of the package)")
+
+
 def lockfile_sha256() -> str:
+    require_checkout()
     return hashlib.sha256(LOCKFILE.read_bytes()).hexdigest()
 
 

@@ -61,6 +61,7 @@ def _pixels(args):
 
 def _batch_id(text):
     from . import batches
+    config.require_checkout()       # a clear message instead of "unknown batch" outside a checkout
     if not (batches.BATCH_DIR / f"batch_{text}.txt").is_file():
         raise argparse.ArgumentTypeError(f"unknown batch {text!r} (000-083 or ref22)")
     return text
@@ -331,12 +332,12 @@ def main(argv=None):
     for k in THREAD_VARS:           # before any numpy-heavy import
         os.environ[k] = "1"
     os.umask(0o002)
-    args = build_parser().parse_args(argv)
     from .claims import ClaimError
     from .driver import BatchError
     try:
+        args = build_parser().parse_args(argv)
         return args.fn(args)
-    except (ClaimError, BatchError) as exc:
+    except (ClaimError, BatchError, config.CheckoutError) as exc:
         print(f"dgs: error: {exc}", file=sys.stderr, flush=True)
         return 1
 
