@@ -6,6 +6,7 @@ The file is TOML.  ``load_settings`` looks for it at an explicit path, else at
 from __future__ import annotations
 
 import os
+import re
 import sys
 from dataclasses import dataclass, fields
 from pathlib import Path
@@ -37,8 +38,14 @@ _PATH_KEYS = ("raw_root", "shard_root", "batch_root", "staging", "reference_root
 _REQUIRED = ("raw_root", "shard_root", "batch_root", "staging")
 
 
-def _expand(value: str) -> Path:
-    return Path(os.path.expandvars(os.path.expanduser(str(value))))
+def _expand(key: str, value: str) -> Path:
+    expanded = os.path.expandvars(os.path.expanduser(str(value)))
+    if "$" in expanded:
+        left = re.findall(r"\$(?:\{[^}]*\}|\w+)", expanded)
+        raise ValueError(
+            f"settings key {key}: unset environment variable {', '.join(left) or '$'} in {value!r}"
+        )
+    return Path(expanded)
 
 
 def _locate(path: Path | None) -> Path:
@@ -75,5 +82,5 @@ def load_settings(path: Path | None = None) -> Settings:
         raise ValueError(f"{p}: missing required settings key(s): {', '.join(missing)}")
     for k in _PATH_KEYS:
         if raw.get(k) is not None:
-            raw[k] = _expand(raw[k])
+            raw[k] = _expand(k, raw[k])
     return Settings(**raw)

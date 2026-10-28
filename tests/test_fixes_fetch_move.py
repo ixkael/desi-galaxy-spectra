@@ -11,6 +11,8 @@ from desi_galaxy_spectra.fetch import FetchError, Fetcher, dest_verified
 from test_fetch_dryrun import FakeSession, Resp, pixel_files
 
 PIX = 7
+
+
 @pytest.fixture()
 def env(tmp_path, monkeypatch):
     """Fake network + fake extraction; returns an object with a run() that executes one job."""

@@ -66,6 +66,14 @@ def test_load_settings_uses_env_var_then_cwd(tmp_path, monkeypatch):
     assert load_settings().staging == Path("/env")
 
 
+def test_load_settings_rejects_unset_variable(tmp_path, monkeypatch):
+    monkeypatch.delenv("DGS_NO_SUCH_VAR", raising=False)
+    p = tmp_path / "s.toml"
+    p.write_text(BASE + 'staging="$DGS_NO_SUCH_VAR/stage"\n')
+    with pytest.raises(ValueError, match=r"staging.*\$DGS_NO_SUCH_VAR"):
+        load_settings(p)
+
+
 def test_load_settings_rejects_unknown_key(tmp_path):
     p = tmp_path / "s.toml"
     p.write_text('raw_rot="/a/raw"\n' + BASE + 'staging="/stage"\n')

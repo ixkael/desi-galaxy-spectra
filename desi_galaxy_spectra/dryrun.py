@@ -167,7 +167,7 @@ def run(pixels, raw_root, shard_dir, staging, out_dir=config.DRY_RUN_DIR, fetche
     for w_ in warn:
         log("WARNING: " + w_)
     log(f"staging free {stg_free / 1e9:.1f} GB (need {summary['staging_needed_bytes'] / 1e9:.1f}); "
-        f"raw archive free {nas_free / 1e9:.1f} GB (raw files kept: {total_dl / 1e9:.1f} GB)")
+        f"shard dir free {nas_free / 1e9:.1f} GB (raw files kept: {total_dl / 1e9:.1f} GB)")
     log(f"projected package {proj_r / 1e9:.2f} GB with resolution, {proj_n / 1e9:.2f} GB without")
     log(f"projected time {summary['projected_seconds_serial'] / 3600:.2f} h serial "
         f"({summary['projected_seconds_wall_assuming_linear_scaling'] / 3600:.2f} h with "
