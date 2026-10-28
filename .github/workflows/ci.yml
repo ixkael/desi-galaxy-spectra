@@ -1,0 +1,42 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: tests on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-24.04-arm]
+    steps:
+      - uses: actions/checkout@v4
+
+      # fitsio 1.4.2 has no wheel for every platform and is built from the source distribution
+      # (notably on ubuntu-24.04-arm), so the C toolchain and the libraries it links must exist
+      # before `uv sync`.
+      - name: Install the C toolchain for the fitsio source build
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential pkg-config libcurl4-openssl-dev zlib1g-dev libbz2-dev
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.10"
+
+      - name: Install the locked environment
+        run: uv sync --frozen
+
+      - name: Tests
+        run: uv run pytest -q
+
+      - name: Lint
+        run: uv run ruff check
+
+      - name: Hygiene grep
+        run: bash tools/hygiene_grep.sh

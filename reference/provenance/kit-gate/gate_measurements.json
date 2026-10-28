@@ -17,5 +17,5 @@
  "seconds_package_with_resolution": 40.67,
  "seconds_package_without_resolution": 8.21,
  "seconds_package_original": 38.57,
- "note": "package bytes per object = sum of chunk file sizes / clean objects in chunks; single pixel, measured 2026-10-23 on blDesktop, one core"
+ "note": "package bytes per object = sum of chunk file sizes / clean objects in chunks; single pixel, measured 2026-10-23 on x86_64 workstation, one core"
 }

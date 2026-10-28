@@ -1,0 +1,58 @@
+{
+  "run_id": "2026-10-23-dry-run-100",
+  "profile": "engineer",
+  "provenance": {
+    "repo": "pop-cosmos_DESI",
+    "git_sha": "0e3f14d9",
+    "dirty": true,
+    "command": "desi_kit/kit.py extract --dry-run --pixels desi_kit/pixel_lists/dr1_decals_random100.txt --raw-root <nas>/desi_dr1 --shard-dir <nas>/pop-cosmos_DESI_packages --staging <scratch>/2026-10-23-desi-kit/staging --workers 4",
+    "machine": "x86_64 workstation",
+    "environment": "<scratch>/2026-10-23-desi-kit/env (desi_kit/requirements.lock.txt)",
+    "seeds": [],
+    "wall_time_s": 110,
+    "inputs": [
+      {"path": "desi_kit/pixel_lists/dr1_decals_random100.txt", "rows": 100},
+      {"path": "desi_kit/pixel_lists/counts_class_chunk.csv"},
+      {"path": "desi_kit/pixel_lists/pixel_photsys_table.csv"},
+      {"path": "desi_kit/reference/2026-10-23-kit-gate/gate_measurements.json"}
+    ]
+  },
+  "model": {"name": "desi_kit 0.1.0 extract --dry-run (HTTP HEAD only)", "n_free_parameters": 0, "selection": []},
+  "parameters": [],
+  "diagnostics": {
+    "chi2_reduced": "not produced: no fit (dry run)",
+    "residuals": "not produced: no fit",
+    "pulls": "not produced: no fit",
+    "convergence": "not produced: no fit",
+    "files_ok": 600,
+    "files_expected": 600,
+    "missing_files": 0,
+    "download_bytes_total": 82678677592,
+    "download_bytes_per_pixel": {"min": 126073518, "median": 638002174, "max": 2066582974},
+    "n_clean_galaxies_projected": {"total": 97553, "BGS": 45698, "ELG": 28425, "LRG": 23430},
+    "projected_package_bytes_with_resolution": 34632742078,
+    "projected_package_bytes_without_resolution": 5630307446,
+    "projected_seconds_serial_per_design": 43796.9,
+    "projected_seconds_wall_4_workers_if_linear": 10949.2,
+    "staging_free_bytes": 41644380160,
+    "staging_needed_bytes_4_workers": 13266331896,
+    "nas_free_bytes": 16372076150784,
+    "secondary": {
+      "projected_seconds_serial_per_object": 18157,
+      "projected_shard_bytes": 41400000000,
+      "projected_download_seconds_at_9.8MBps": 8437,
+      "note": "arithmetic on measured constants; not part of the DESIGN.md addendum rules"
+    }
+  },
+  "outputs": [
+    "desi_kit/reference/2026-10-23-dry-run-100/per_pixel.csv",
+    "desi_kit/reference/2026-10-23-dry-run-100/projected_counts_class_chunk.csv",
+    "desi_kit/reference/2026-10-23-dry-run-100/dry_run_summary.json"
+  ],
+  "status": {
+    "gates_passed": ["no missing files", "staging free space"],
+    "gates_failed": [],
+    "blockers": ["step-6 code-review blockers in ../2026-10-23-kit-gate/CODE_REVIEW.md"],
+    "needs_decision": ["approve step 6 download (82.7 GB) after review fixes", "metadata rule for multi-pixel chunks"]
+  }
+}

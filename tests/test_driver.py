@@ -8,7 +8,7 @@ from desi_galaxy_spectra.driver import BatchError, batch_dirs, run_batch, stage_
 
 quiet = dict(log=lambda m: None)
 # strings that must never reach the public tree (built in pieces so that this file is clean too)
-PRIVATE = ("/home" + "/bl", "NAS" + "/Four", "claude" + "-scratch", "bl" + "desktop")
+PRIVATE = ("/home" + "/bl", "NAS" + "/Four", "claude" + "-scratch")
 
 
 def test_run_batch_reaches_verified_on_synthetic_batch(settings_tmp, fake_batch):

@@ -1,0 +1,1477 @@
+{
+ "counts": {
+  "BGS": {
+   "ref_rows_hp21852": 867,
+   "ref_rows_contiguous_from": 0,
+   "ref_rows_contiguous": true,
+   "new_rows": 867,
+   "matched": 867,
+   "only_ref": 0,
+   "only_new": 0,
+   "objidx_targetid_mismatch_ref": 0,
+   "objidx_targetid_mismatch_new": 0,
+   "n_spectra_groups_new": 867,
+   "same_row_order": true,
+   "programs": {
+    "bright": 867
+   }
+  },
+  "ELG": {
+   "ref_rows_hp21852": 1337,
+   "ref_rows_contiguous_from": 0,
+   "ref_rows_contiguous": true,
+   "new_rows": 1337,
+   "matched": 1337,
+   "only_ref": 0,
+   "only_new": 0,
+   "objidx_targetid_mismatch_ref": 0,
+   "objidx_targetid_mismatch_new": 0,
+   "n_spectra_groups_new": 1337,
+   "same_row_order": true,
+   "programs": {
+    "dark": 1337
+   }
+  },
+  "LRG": {
+   "ref_rows_hp21852": 627,
+   "ref_rows_contiguous_from": 0,
+   "ref_rows_contiguous": true,
+   "new_rows": 627,
+   "matched": 627,
+   "only_ref": 0,
+   "only_new": 0,
+   "objidx_targetid_mismatch_ref": 0,
+   "objidx_targetid_mismatch_new": 0,
+   "n_spectra_groups_new": 627,
+   "same_row_order": true,
+   "programs": {
+    "bright": 64,
+    "dark": 563
+   }
+  }
+ },
+ "datasets": {
+  "flux": {
+   "n_compared": 2831,
+   "dtype_mismatch": 0,
+   "shape_mismatch": 0,
+   "n_obj_byte_diff": 0,
+   "n_elem_diff": 0,
+   "n_elem_total": 22028011,
+   "max_abs": 0.0,
+   "max_rel": 0.0,
+   "max_ulp": 0,
+   "ulp_hist": {},
+   "region_elem_diff": {
+    "B-only <5600": 0,
+    "B/R overlap 5600-5950": 0,
+    "R-only 5950-7400": 0,
+    "R/Z overlap 7400-7700": 0,
+    "Z-only >7700": 0
+   },
+   "nan_pattern_mismatch": 0,
+   "n_nan_ref": 0,
+   "n_nan_new": 0
+  },
+  "ivar": {
+   "n_compared": 2831,
+   "dtype_mismatch": 0,
+   "shape_mismatch": 0,
+   "n_obj_byte_diff": 0,
+   "n_elem_diff": 0,
+   "n_elem_total": 22028011,
+   "max_abs": 0.0,
+   "max_rel": 0.0,
+   "max_ulp": 0,
+   "ulp_hist": {},
+   "region_elem_diff": {
+    "B-only <5600": 0,
+    "B/R overlap 5600-5950": 0,
+    "R-only 5950-7400": 0,
+    "R/Z overlap 7400-7700": 0,
+    "Z-only >7700": 0
+   },
+   "nan_pattern_mismatch": 0,
+   "n_nan_ref": 0,
+   "n_nan_new": 0
+  },
+  "mask": {
+   "n_compared": 2831,
+   "dtype_mismatch": 0,
+   "shape_mismatch": 0,
+   "n_obj_byte_diff": 0,
+   "n_elem_diff": 0,
+   "n_elem_total": 22028011,
+   "max_abs": 0.0,
+   "max_rel": 0.0,
+   "max_ulp": 0,
+   "ulp_hist": {},
+   "region_elem_diff": {
+    "B-only <5600": 0,
+    "B/R overlap 5600-5950": 0,
+    "R-only 5950-7400": 0,
+    "R/Z overlap 7400-7700": 0,
+    "Z-only >7700": 0
+   },
+   "nan_pattern_mismatch": 0,
+   "n_nan_ref": 0,
+   "n_nan_new": 0
+  },
+  "resolution": {
+   "n_compared": 2831,
+   "dtype_mismatch": 0,
+   "shape_mismatch": 0,
+   "n_obj_byte_diff": 0,
+   "n_elem_diff": 0,
+   "n_elem_total": 242308121,
+   "max_abs": 0.0,
+   "max_rel": 0.0,
+   "max_ulp": 0,
+   "ulp_hist": {},
+   "region_elem_diff": {
+    "B-only <5600": 0,
+    "B/R overlap 5600-5950": 0,
+    "R-only 5950-7400": 0,
+    "R/Z overlap 7400-7700": 0,
+    "Z-only >7700": 0
+   },
+   "nan_pattern_mismatch": 0,
+   "n_nan_ref": 0,
+   "n_nan_new": 0
+  },
+  "wavelength": {
+   "n_compared": 2831,
+   "dtype_mismatch": 0,
+   "shape_mismatch": 0,
+   "n_obj_byte_diff": 0,
+   "n_elem_diff": 0,
+   "n_elem_total": 22028011,
+   "max_abs": 0.0,
+   "max_rel": 0.0,
+   "max_ulp": 0,
+   "ulp_hist": {},
+   "region_elem_diff": {
+    "B-only <5600": 0,
+    "B/R overlap 5600-5950": 0,
+    "R-only 5950-7400": 0,
+    "R/Z overlap 7400-7700": 0,
+    "Z-only >7700": 0
+   },
+   "nan_pattern_mismatch": 0,
+   "n_nan_ref": 0,
+   "n_nan_new": 0
+  }
+ },
+ "storage": {
+  "flux": {
+   "compression_or_chunk_mismatch": 0
+  },
+  "ivar": {
+   "compression_or_chunk_mismatch": 0
+  },
+  "mask": {
+   "compression_or_chunk_mismatch": 0
+  },
+  "resolution": {
+   "compression_or_chunk_mismatch": 0
+  },
+  "wavelength": {
+   "compression_or_chunk_mismatch": 0
+  }
+ },
+ "obj_attrs": {
+  "BGS": {
+   "arm_R_coverage": {
+    "n": 867,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "arm_B_coverage": {
+    "n": 867,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "arm_Z_coverage": {
+    "n": 867,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "extraction_success": {
+    "n": 867,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "resolution_n_diag": {
+    "n": 867,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "n_pixels": {
+    "n": 867,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "snr_median": {
+    "n": 867,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "targetid": {
+    "n": 867,
+    "n_diff": 0,
+    "max_abs": 0.0
+   }
+  },
+  "ELG": {
+   "arm_R_coverage": {
+    "n": 1337,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "arm_B_coverage": {
+    "n": 1337,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "arm_Z_coverage": {
+    "n": 1337,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "extraction_success": {
+    "n": 1337,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "resolution_n_diag": {
+    "n": 1337,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "n_pixels": {
+    "n": 1337,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "snr_median": {
+    "n": 1337,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "targetid": {
+    "n": 1337,
+    "n_diff": 0,
+    "max_abs": 0.0
+   }
+  },
+  "LRG": {
+   "arm_R_coverage": {
+    "n": 627,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "arm_B_coverage": {
+    "n": 627,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "arm_Z_coverage": {
+    "n": 627,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "extraction_success": {
+    "n": 627,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "resolution_n_diag": {
+    "n": 627,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "n_pixels": {
+    "n": 627,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "snr_median": {
+    "n": 627,
+    "n_diff": 0,
+    "max_abs": 0.0
+   },
+   "targetid": {
+    "n": 627,
+    "n_diff": 0,
+    "max_abs": 0.0
+   }
+  }
+ },
+ "columns": {
+  "BGS/catalog/chi2": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "BGS/catalog/coadd_file": {
+   "equal": false,
+   "dtype_ref": "|S256",
+   "dtype_new": "|S256",
+   "n_rows_diff": 867
+  },
+  "BGS/catalog/coeff": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "BGS/catalog/dec": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "BGS/catalog/deltachi2": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "BGS/catalog/desi_target": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  },
+  "BGS/catalog/fiber_index": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "BGS/catalog/healpix": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "BGS/catalog/is_bgs_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "BGS/catalog/is_clean_galaxy": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "BGS/catalog/is_clean_qso": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "BGS/catalog/is_clean_star": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "BGS/catalog/is_elg_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "BGS/catalog/is_galaxy": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "BGS/catalog/is_lrg_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "BGS/catalog/is_qso": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "BGS/catalog/is_qso_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "BGS/catalog/is_star": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "BGS/catalog/ncoeff": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "BGS/catalog/program": {
+   "equal": true,
+   "dtype_ref": "|S10",
+   "dtype_new": "|S10"
+  },
+  "BGS/catalog/ra": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "BGS/catalog/spectype": {
+   "equal": true,
+   "dtype_ref": "|S6",
+   "dtype_new": "|S6"
+  },
+  "BGS/catalog/subtype": {
+   "equal": true,
+   "dtype_ref": "|S20",
+   "dtype_new": "|S20"
+  },
+  "BGS/catalog/survey": {
+   "equal": true,
+   "dtype_ref": "|S10",
+   "dtype_new": "|S10"
+  },
+  "BGS/catalog/targetid": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  },
+  "BGS/catalog/z_redrock": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "BGS/catalog/zerr_redrock": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "BGS/catalog/zwarn": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  },
+  "BGS/photometry/fiberflux_g": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/fiberflux_r": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/fiberflux_z": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/flux_W1": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/flux_W1_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/flux_W2": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/flux_W2_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/flux_g": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/flux_g_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/flux_i": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/flux_r": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/flux_r_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/flux_z": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/flux_z_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/photometry/mw_transmission_W1": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 10,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "BGS/photometry/mw_transmission_W2": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 7,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "BGS/photometry/mw_transmission_g": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 5,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "BGS/photometry/mw_transmission_r": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 9,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "BGS/photometry/mw_transmission_z": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 8,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "BGS/quality/coadd_fiberstatus": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "BGS/quality/deltachi2": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/quality/ebv": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/quality/extraction_success": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "BGS/quality/n_pixels": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "BGS/quality/snr_median": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/quality/spectral_resolution": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/quality/tsnr2_bgs": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/quality/tsnr2_elg": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/quality/tsnr2_lrg": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/quality/tsnr2_qso": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/quality/wavelength_coverage": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "BGS/quality/zwarn": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  },
+  "ELG/catalog/chi2": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "ELG/catalog/coadd_file": {
+   "equal": false,
+   "dtype_ref": "|S256",
+   "dtype_new": "|S256",
+   "n_rows_diff": 1337
+  },
+  "ELG/catalog/coeff": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "ELG/catalog/dec": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "ELG/catalog/deltachi2": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "ELG/catalog/desi_target": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  },
+  "ELG/catalog/fiber_index": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "ELG/catalog/healpix": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "ELG/catalog/is_bgs_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "ELG/catalog/is_clean_galaxy": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "ELG/catalog/is_clean_qso": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "ELG/catalog/is_clean_star": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "ELG/catalog/is_elg_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "ELG/catalog/is_galaxy": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "ELG/catalog/is_lrg_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "ELG/catalog/is_qso": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "ELG/catalog/is_qso_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "ELG/catalog/is_star": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "ELG/catalog/ncoeff": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "ELG/catalog/program": {
+   "equal": true,
+   "dtype_ref": "|S10",
+   "dtype_new": "|S10"
+  },
+  "ELG/catalog/ra": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "ELG/catalog/spectype": {
+   "equal": true,
+   "dtype_ref": "|S6",
+   "dtype_new": "|S6"
+  },
+  "ELG/catalog/subtype": {
+   "equal": true,
+   "dtype_ref": "|S20",
+   "dtype_new": "|S20"
+  },
+  "ELG/catalog/survey": {
+   "equal": true,
+   "dtype_ref": "|S10",
+   "dtype_new": "|S10"
+  },
+  "ELG/catalog/targetid": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  },
+  "ELG/catalog/z_redrock": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "ELG/catalog/zerr_redrock": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "ELG/catalog/zwarn": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  },
+  "ELG/photometry/fiberflux_g": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/fiberflux_r": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/fiberflux_z": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/flux_W1": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/flux_W1_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/flux_W2": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/flux_W2_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/flux_g": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/flux_g_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/flux_i": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/flux_r": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/flux_r_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/flux_z": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/flux_z_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/photometry/mw_transmission_W1": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 9,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "ELG/photometry/mw_transmission_W2": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 16,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "ELG/photometry/mw_transmission_g": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 16,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "ELG/photometry/mw_transmission_r": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 16,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "ELG/photometry/mw_transmission_z": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 17,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "ELG/quality/coadd_fiberstatus": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "ELG/quality/deltachi2": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/quality/ebv": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/quality/extraction_success": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "ELG/quality/n_pixels": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "ELG/quality/snr_median": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/quality/spectral_resolution": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/quality/tsnr2_bgs": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/quality/tsnr2_elg": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/quality/tsnr2_lrg": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/quality/tsnr2_qso": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/quality/wavelength_coverage": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "ELG/quality/zwarn": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  },
+  "LRG/catalog/chi2": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "LRG/catalog/coadd_file": {
+   "equal": false,
+   "dtype_ref": "|S256",
+   "dtype_new": "|S256",
+   "n_rows_diff": 627
+  },
+  "LRG/catalog/coeff": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "LRG/catalog/dec": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "LRG/catalog/deltachi2": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "LRG/catalog/desi_target": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  },
+  "LRG/catalog/fiber_index": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "LRG/catalog/healpix": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "LRG/catalog/is_bgs_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "LRG/catalog/is_clean_galaxy": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "LRG/catalog/is_clean_qso": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "LRG/catalog/is_clean_star": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "LRG/catalog/is_elg_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "LRG/catalog/is_galaxy": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "LRG/catalog/is_lrg_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "LRG/catalog/is_qso": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "LRG/catalog/is_qso_target": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "LRG/catalog/is_star": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "LRG/catalog/ncoeff": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "LRG/catalog/program": {
+   "equal": true,
+   "dtype_ref": "|S10",
+   "dtype_new": "|S10"
+  },
+  "LRG/catalog/ra": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "LRG/catalog/spectype": {
+   "equal": true,
+   "dtype_ref": "|S6",
+   "dtype_new": "|S6"
+  },
+  "LRG/catalog/subtype": {
+   "equal": true,
+   "dtype_ref": "|S20",
+   "dtype_new": "|S20"
+  },
+  "LRG/catalog/survey": {
+   "equal": true,
+   "dtype_ref": "|S10",
+   "dtype_new": "|S10"
+  },
+  "LRG/catalog/targetid": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  },
+  "LRG/catalog/z_redrock": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "LRG/catalog/zerr_redrock": {
+   "equal": true,
+   "dtype_ref": "float64",
+   "dtype_new": "float64"
+  },
+  "LRG/catalog/zwarn": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  },
+  "LRG/photometry/fiberflux_g": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/fiberflux_r": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/fiberflux_z": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/flux_W1": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/flux_W1_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/flux_W2": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/flux_W2_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/flux_g": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/flux_g_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/flux_i": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/flux_r": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/flux_r_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/flux_z": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/flux_z_ivar": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/photometry/mw_transmission_W1": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 6,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "LRG/photometry/mw_transmission_W2": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 3,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "LRG/photometry/mw_transmission_g": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 6,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "LRG/photometry/mw_transmission_r": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 2,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "LRG/photometry/mw_transmission_z": {
+   "equal": false,
+   "dtype_ref": "float32",
+   "dtype_new": "float32",
+   "n_rows_diff": 2,
+   "max_abs": 5.960464477539063e-08,
+   "max_ulp": 1
+  },
+  "LRG/quality/coadd_fiberstatus": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "LRG/quality/deltachi2": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/quality/ebv": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/quality/extraction_success": {
+   "equal": true,
+   "dtype_ref": "bool",
+   "dtype_new": "bool"
+  },
+  "LRG/quality/n_pixels": {
+   "equal": true,
+   "dtype_ref": "int32",
+   "dtype_new": "int32"
+  },
+  "LRG/quality/snr_median": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/quality/spectral_resolution": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/quality/tsnr2_bgs": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/quality/tsnr2_elg": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/quality/tsnr2_lrg": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/quality/tsnr2_qso": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/quality/wavelength_coverage": {
+   "equal": true,
+   "dtype_ref": "float32",
+   "dtype_new": "float32"
+  },
+  "LRG/quality/zwarn": {
+   "equal": true,
+   "dtype_ref": "int64",
+   "dtype_new": "int64"
+  }
+ },
+ "class_attrs": {
+  "BGS": {
+   "extraction_success_count": {
+    "ref": "16253",
+    "new": "867"
+   },
+   "extraction_success_rate": {
+    "ref": "1.0",
+    "new": "1.0"
+   },
+   "galaxy_type": {
+    "ref": "DESI_DR1_BGS",
+    "new": "DESI_DR1_BGS"
+   },
+   "median_snr": {
+    "ref": "2.9168954124171984",
+    "new": "3.0652945636316247"
+   },
+   "n_clean_galaxy": {
+    "ref": "15707",
+    "new": "837"
+   },
+   "n_objects": {
+    "ref": "16253",
+    "new": "867"
+   },
+   "n_qso_contamination": {
+    "ref": "102",
+    "new": "5"
+   },
+   "n_star_contamination": {
+    "ref": "259",
+    "new": "13"
+   },
+   "n_zwarn_nonzero": {
+    "ref": "152",
+    "new": "12"
+   },
+   "selection": {
+    "ref": "DESI_TARGET bitmask match for BGS, with priority order LRG>ELG>BGS when a fiber matches multiple classes",
+    "new": "DESI_TARGET bitmask match for BGS, with priority order LRG>ELG>BGS when a fiber matches multiple classes"
+   }
+  },
+  "ELG": {
+   "extraction_success_count": {
+    "ref": "24465",
+    "new": "1337"
+   },
+   "extraction_success_rate": {
+    "ref": "1.0",
+    "new": "1.0"
+   },
+   "galaxy_type": {
+    "ref": "DESI_DR1_ELG",
+    "new": "DESI_DR1_ELG"
+   },
+   "median_snr": {
+    "ref": "0.4431516349396254",
+    "new": "0.4349550246183471"
+   },
+   "n_clean_galaxy": {
+    "ref": "16835",
+    "new": "948"
+   },
+   "n_objects": {
+    "ref": "24465",
+    "new": "1337"
+   },
+   "n_qso_contamination": {
+    "ref": "1761",
+    "new": "87"
+   },
+   "n_star_contamination": {
+    "ref": "55",
+    "new": "1"
+   },
+   "n_zwarn_nonzero": {
+    "ref": "4227",
+    "new": "209"
+   },
+   "selection": {
+    "ref": "DESI_TARGET bitmask match for ELG, with priority order LRG>ELG>BGS when a fiber matches multiple classes",
+    "new": "DESI_TARGET bitmask match for ELG, with priority order LRG>ELG>BGS when a fiber matches multiple classes"
+   }
+  },
+  "LRG": {
+   "extraction_success_count": {
+    "ref": "12508",
+    "new": "627"
+   },
+   "extraction_success_rate": {
+    "ref": "1.0",
+    "new": "1.0"
+   },
+   "galaxy_type": {
+    "ref": "DESI_DR1_LRG",
+    "new": "DESI_DR1_LRG"
+   },
+   "median_snr": {
+    "ref": "1.6589521451745672",
+    "new": "1.3839491006972386"
+   },
+   "n_clean_galaxy": {
+    "ref": "11677",
+    "new": "580"
+   },
+   "n_objects": {
+    "ref": "12508",
+    "new": "627"
+   },
+   "n_qso_contamination": {
+    "ref": "313",
+    "new": "17"
+   },
+   "n_star_contamination": {
+    "ref": "289",
+    "new": "18"
+   },
+   "n_zwarn_nonzero": {
+    "ref": "136",
+    "new": "8"
+   },
+   "selection": {
+    "ref": "DESI_TARGET bitmask match for LRG, with priority order LRG>ELG>BGS when a fiber matches multiple classes",
+    "new": "DESI_TARGET bitmask match for LRG, with priority order LRG>ELG>BGS when a fiber matches multiple classes"
+   }
+  }
+ },
+ "metadata_attrs": {
+  "bgs_group_skipped": {
+   "equal": true
+  },
+  "class_priority": {
+   "equal": true
+  },
+  "creation_date": {
+   "ignored": true,
+   "ref": "2026-06-09T15:09:39.037291",
+   "new": "2026-10-23T07:46:36.887171"
+  },
+  "data_source": {
+   "equal": true
+  },
+  "desi_data_release": {
+   "equal": true
+  },
+  "desi_reduction": {
+   "equal": true
+  },
+  "extraction_method": {
+   "equal": true
+  },
+  "fastspecfit_note": {
+   "equal": true
+  },
+  "fastspecfit_populated": {
+   "equal": true
+  },
+  "has_bright_program": {
+   "equal": true
+  },
+  "has_dark_program": {
+   "equal": true
+  },
+  "n_coadds_processed": {
+   "ignored": true,
+   "ref": "44",
+   "new": "2"
+  },
+  "n_total_objects": {
+   "ignored": true,
+   "ref": "53226",
+   "new": "2831"
+  },
+  "pipeline_version": {
+   "equal": true
+  },
+  "programs_processed": {
+   "equal": true
+  },
+  "script_name": {
+   "equal": true
+  },
+  "script_version": {
+   "equal": true
+  },
+  "truth_filter_recipe": {
+   "equal": true
+  },
+  "v3_changelog": {
+   "equal": true
+  }
+ },
+ "units_attrs": {
+  "coordinates": true,
+  "ebv": true,
+  "fiberflux": true,
+  "flux": true,
+  "ivar": true,
+  "mask": true,
+  "mw_transmission": true,
+  "photometry": true,
+  "photometry_ivar": true,
+  "tsnr2": true,
+  "wavelength": true
+ },
+ "nan": {},
+ "diff_examples": [],
+ "metadata_subgroups": {
+  "ref": [
+   "units"
+  ],
+  "new": [
+   "units"
+  ]
+ },
+ "elapsed_s": 30.33077120780945
+}

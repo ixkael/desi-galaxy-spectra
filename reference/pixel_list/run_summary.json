@@ -1,0 +1,28 @@
+{
+ "run_id": "2026-10-23-desi-pixel-list",
+ "profile": "engineer",
+ "provenance": {
+  "repo": "pop-cosmos_DESI", "git_sha": "0e3f14d9c1c73b43af1eb0c5467d1053d715d90b", "dirty": true,
+  "command": "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 <home>/anaconda3/bin/python scripts/build_desi_pixel_list.py --cache <scratch>/2026-10-23-desi-pixel-list/cache --out desi_kit/pixel_lists",
+  "machine": "x86_64 workstation", "environment": "<home>/anaconda3 python 3.10, numpy 2.2.6, astropy 6.1.7",
+  "seeds": [20261023], "wall_time_s": "not produced: not timed",
+  "inputs": [
+   {"path": "<nas>/desi_dr1/zcatalog/v1/zpix-main-bright.fits", "rows": 11020470, "bytes": 9425099520, "hash": "sha256:127dcc30c54da827eecdf8161a0122f649fcea6aaa2a8798f7582bd4f0298750"},
+   {"path": "<nas>/desi_dr1/zcatalog/v1/zpix-main-dark.fits", "rows": 12778525, "bytes": 11289738240, "hash": "sha256:da8cc3f8fd7e1c839c2cd6233c08cf4b5ccf1843e2d3a3847f81a5d62bb90a68"}
+  ]
+ },
+ "model": {"stage": "pixel selection and clean-galaxy counts", "free_parameters": 0},
+ "parameters": "not produced: no fit",
+ "diagnostics": {
+  "recount_22_total": 44219, "recount_22_reference": 44219, "recount_22_all_cells_match": true,
+  "n_eligible_pixels": 8412, "frac_S_eligible_min": 1.0,
+  "drawn100_total": 97553, "drawn100_by_class": {"BGS": 45698, "ELG": 28425, "LRG": 23430},
+  "drawn100_plus_primary_fiberstatus_total": 97552,
+  "all_eligible_total": 8694127, "all_eligible_plus_primary_fiberstatus_total": 8693618,
+  "drawn100_download_GB": 72.8, "drawn100_packaged_GB": 34.5,
+  "all_eligible_download_TB": 6.12, "all_eligible_packaged_TB": 3.08,
+  "thin_cells_drawn100": ["BGS 0.6-0.7 (44)", "BGS 0.7-0.8 (18)", "BGS 0.8-0.9 (3)", "BGS 0.9-1.0 (1)", "BGS 1.0-1.1 (2)", "BGS 1.1-1.2 (5)", "BGS 1.2-1.4 (14)", "BGS 1.4-1.6 (3)", "BGS z>=1.6 (30)", "LRG z<0.1 (57)", "LRG 0.1-0.2 (86)", "LRG 1.4-1.6 (6)", "LRG z>=1.6 (27)"]
+ },
+ "outputs": ["desi_kit/pixel_lists/dr1_decals_random100.txt", "desi_kit/pixel_lists/dr1_decals_random100.json", "desi_kit/pixel_lists/pixel_photsys_table.csv", "desi_kit/pixel_lists/counts_class_chunk.csv", "desi_kit/pixel_lists/counts_summary.json", "desi_kit/pixel_lists/RUN_SUMMARY.md"],
+ "status": {"gates_passed": ["22-pixel recount", "HEALPIX range", "pixel totals"], "gates_failed": [], "needs_decision": ["keep BGS-from-dark rows (extractor behaviour)"]}
+}

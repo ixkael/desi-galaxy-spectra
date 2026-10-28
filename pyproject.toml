@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "desi-galaxy-spectra"
 version = "1.0.0"
 description = "Extraction of DESI DR1 galaxy spectra into HDF5 archives"
+readme = "README.md"
 license = { text = "BSD-3-Clause" }
 requires-python = ">=3.10,<3.12"
 dependencies = [
@@ -53,7 +54,7 @@ dependencies = [
 dgs = "desi_galaxy_spectra.cli:main"
 
 [dependency-groups]
-dev = ["pytest", "ruff"]
+dev = ["pytest", "ruff==0.17.3"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["desi_galaxy_spectra"]
@@ -66,7 +67,16 @@ environments = [
 ]
 
 [tool.ruff]
-extend-exclude = ["desi_galaxy_spectra/frozen"]
+# frozen/ and the two comparison scripts under reference/provenance/ are records of code that
+# was run as it stands; they are kept verbatim, not restyled.
+extend-exclude = [
+    "desi_galaxy_spectra/frozen",
+    "reference/provenance/kit-gate/compare_gate_1to2.py",
+    "reference/provenance/desispec-byte-equality/compare_21852.py",
+]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

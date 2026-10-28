@@ -13,10 +13,6 @@ from desi_galaxy_spectra import package
 KIT = Path(__file__).resolve().parents[1]
 GATE = KIT / "reference/provenance/kit-gate/gate_checks_3to5.py"
 
-# TEMPORARY (Task 2 -> Task 8): the gate script is copied into the repository in Task 8.
-# Task 8 must delete this marker so that a missing gate script fails instead of skipping.
-pytestmark = pytest.mark.skipif(not GATE.exists(), reason="gate_checks_3to5.py arrives in Task 8")
-
 
 def _gate():
     spec = importlib.util.spec_from_file_location("gate_n1", GATE)

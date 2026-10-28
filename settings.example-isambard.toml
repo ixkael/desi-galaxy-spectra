@@ -1,0 +1,25 @@
+# Example settings for a shared tree on a cluster node (Isambard-style).  Copy this file to
+# settings.toml (ignored by git), point DGS_TREE at the shared tree, and set DGS_SETTINGS to the
+# copy.  Path values expand $VAR and ~; an unset variable is an error.
+
+# The raw DESI DR1 coadd and redrock files, laid out as on the public archive.
+raw_root = "$DGS_TREE/raw"
+# Per-pixel shards written by the extraction (several TB for all batches).
+shard_root = "$DGS_TREE/shards"
+# Packaged and verified batches, claims, status and logs.
+batch_root = "$DGS_TREE/batches"
+# Node-local or fast scratch: streaming downloads and temporary files.
+staging = "$DGS_TREE/staging"
+# The Block B regression references (reference/regress/<stem>.json and the arrays under
+# <reference_root>/<stem>/); only `dgs regress` needs them.
+reference_root = "$DGS_TREE/reference"
+
+# 64 workers x 1.36 GB peak per worker is about 87 GB, under the 115 GB of one node slice.
+workers = 64
+
+keep_raw_after_verify = true
+keep_shards_after_verify = true
+with_resolution = true
+
+# Unix group that owns the shared tree; `dgs doctor` reports paths outside it.
+# group = "<shared-group>"

@@ -1,0 +1,66 @@
+{
+  "run_id": "2026-10-23-kit-gate",
+  "profile": "engineer",
+  "provenance": {
+    "repo": "pop-cosmos_DESI",
+    "git_sha": "0e3f14d9",
+    "dirty": true,
+    "command": "see RUN_SUMMARY.md Provenance and <scratch>/2026-10-23-desi-kit/BUILD_NOTES.md (kit.py extract --pixel 21852 --local-flat ... --workers 1 --keep-temp; kit.py package [--no-resolution]; scripts/package_desi_zchunks.py on reference; kit.py manifest; kit.py verify; gate_checks_3to5.py; compare_gate_1to2.py)",
+    "machine": "x86_64 workstation",
+    "environment": "uv venv <scratch>/2026-10-23-desi-kit/env, python 3.10.20, desi_kit/requirements.lock.txt (sha256 b035c5b84073eb8eb1ef4054a1b29206e199c1ca78ee382523c63d10397e49cd) + pytest 9.1.1",
+    "seeds": [],
+    "wall_time_s": 437.97,
+    "inputs": [
+      {"path": "<nas>/pop-cosmos_DESI_data_backup/desi_dr1_healpix/coadd-main-bright-21852.fits", "bytes": 809763840},
+      {"path": "<nas>/pop-cosmos_DESI_data_backup/desi_dr1_healpix/coadd-main-dark-21852.fits", "bytes": 1185212160},
+      {"path": "data/redrock_cache/redrock-main-bright-21852.fits", "bytes": 1474560},
+      {"path": "data/redrock_cache/redrock-main-dark-21852.fits", "bytes": 2234880},
+      {"path": "<nas>/pop-cosmos_DESI_packages/kit_reference/desispec070_pixel21852.h5", "bytes": 1080516994, "hash": "md5:20a4a9148dc13ccb0a9ca2a8ebb28b2d"}
+    ]
+  },
+  "model": {
+    "name": "desi_kit 0.1.0 extraction + shard + chunk packaging (no fit)",
+    "config_path": "desi_kit/desikit/config.py",
+    "n_free_parameters": 0,
+    "selection": []
+  },
+  "parameters": [],
+  "diagnostics": {
+    "chi2_reduced": "not produced: no fit (byte-equality gate)",
+    "residuals": "not produced: no fit",
+    "pulls": "not produced: no fit",
+    "convergence": "not produced: no fit",
+    "gate": {
+      "check1_temp_vs_reference": {"pass": true, "differences": 0, "elements_compared": 330615504, "datasets": 14335, "attrs": 22707, "excluded": ["metadata/creation_date", "directory part of catalog/coadd_file"]},
+      "check2_shard_vs_reference": {"pass": true, "differences": 0, "objects": {"BGS": 867, "ELG": 1337, "LRG": 627}},
+      "check3_original_vs_kit_packager": {"pass": true, "files": 15, "datasets": 2751, "differences": 0},
+      "check4_no_resolution": {"pass": true, "files": 15, "differences": 0},
+      "check5_manifest_roundtrip_and_1ulp": {"pass": true},
+      "pytest": {"passed": 21, "failed": 0}
+    },
+    "measured": {
+      "seconds_per_pixel_pair": 437.97,
+      "workers": 1,
+      "peak_rss_mb": 970.2,
+      "n_objects_extracted": 2831,
+      "n_clean_objects_packaged": 2365,
+      "bytes_per_object_with_resolution": 355014.6,
+      "bytes_per_object_without_resolution": 57715.4,
+      "shard_bytes": 999410870
+    },
+    "secondary": {}
+  },
+  "outputs": [
+    "<nas>/pop-cosmos_DESI_packages/kit_reference/kit_gate_21852/",
+    "desi_kit/reference/2026-10-23-kit-gate/gate_measurements.json",
+    "desi_kit/reference/2026-10-23-kit-gate/VERIFY_GATE_1to2.md",
+    "desi_kit/reference/2026-10-23-kit-gate/gate_checks_3to5.json",
+    "desi_kit/reference/2026-10-23-kit-gate/CODE_REVIEW.md"
+  ],
+  "status": {
+    "gates_passed": ["check1", "check2", "check3", "check4", "check5", "pytest"],
+    "gates_failed": [],
+    "blockers": ["step 6 only: raw-file move to NAS not re-hashed / not repaired after crash (shard.py:298,335-343)", "step 6 only: multi-pixel chunks copy group attrs and source_metadata from first shard (package.py:161,188)"],
+    "needs_decision": ["how multi-pixel chunks carry per-shard group attrs/metadata", "approval to fix review blockers and should-fix items before step 6"]
+  }
+}

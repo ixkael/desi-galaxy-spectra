@@ -1,0 +1,86 @@
+{
+  "run_id": "2026-10-23-kit-gate-v2",
+  "profile": "engineer",
+  "provenance": {
+    "repo": "pop-cosmos_DESI",
+    "git_sha": "aa237d44",
+    "dirty": true,
+    "command": "driver <scratch>/2026-10-23-desi-fixes/run_gate_v2.sh (kit.py extract --pixel 21852 --local-flat ... --workers 1 --keep-temp; kit.py package [--no-resolution]; scripts/package_desi_zchunks.py on reference; kit.py manifest; kit.py verify --shard-dir; python -I compare_gate_1to2.py; gate_checks_3to5.py --gate-dir; pytest); kit 0.2.0 fixes uncommitted, diff <scratch>/2026-10-23-desi-fixes/fixes.diff",
+    "machine": "x86_64 workstation",
+    "environment": "uv venv <scratch>/2026-10-23-desi-kit/env, python 3.10.20, desi_kit/requirements.lock.txt + pytest",
+    "seeds": [],
+    "wall_time_s": 432.85,
+    "inputs": [
+      {"path": "<nas>/pop-cosmos_DESI_data_backup/desi_dr1_healpix/coadd-main-bright-21852.fits", "bytes": 809763840},
+      {"path": "<nas>/pop-cosmos_DESI_data_backup/desi_dr1_healpix/coadd-main-dark-21852.fits", "bytes": 1185212160},
+      {"path": "data/redrock_cache/redrock-main-bright-21852.fits", "bytes": 1474560},
+      {"path": "data/redrock_cache/redrock-main-dark-21852.fits", "bytes": 2234880},
+      {"path": "<nas>/pop-cosmos_DESI_packages/kit_reference/desispec070_pixel21852.h5", "bytes": 1080516994, "hash": "md5:20a4a9148dc13ccb0a9ca2a8ebb28b2d"}
+    ]
+  },
+  "model": {
+    "name": "desi_kit 0.2.0 extraction + shard + chunk packaging (no fit)",
+    "config_path": "desi_kit/desikit/config.py",
+    "n_free_parameters": 0,
+    "selection": []
+  },
+  "parameters": [],
+  "diagnostics": {
+    "chi2_reduced": "not produced: no fit (exact-equality gate)",
+    "residuals": [],
+    "pulls": {"mean": "not produced: no fit", "width": "not produced: no fit", "tail_fraction_3sigma": "not produced: no fit"},
+    "convergence": {"converged": "not produced: no fit"},
+    "physical_assertions": [
+      {"assertion": "check 1: temp v4-layout file equals reference (0 differences, 330615504 elements)", "passed": true},
+      {"assertion": "check 2: shard row i equals reference obj_i (0 differences, 330638152 elements)", "passed": true},
+      {"assertion": "check 3: original vs kit packager, 15 files, 2751 datasets, 0 differences", "passed": true},
+      {"assertion": "check 3: source_shard_table contents equal shard attributes in all 15 files", "passed": true},
+      {"assertion": "check 4: no-resolution vs with-resolution, 15 files, 0 differences besides declared", "passed": true},
+      {"assertion": "check 5: manifest round-trip identical; injected 1-ULP detected naming file and dataset", "passed": true},
+      {"assertion": "kit verify passed on pristine chunks", "passed": true},
+      {"assertion": "pytest: 51 passed, 0 failed", "passed": true}
+    ],
+    "gate": {
+      "ref_md5_ok": true,
+      "check1_temp_vs_reference": {"pass": true, "differences": 0, "groups": 2849, "attrs": 22707, "datasets": 14335, "elements_compared": 330615504},
+      "check2_shard_vs_reference": {"pass": true, "differences": 0, "objects": {"BGS": 867, "ELG": 1337, "LRG": 627}, "datasets_compared": 14359, "elements_compared": 330638152, "spectra_attrs_compared": 24, "table_columns_compared": 180},
+      "check3_original_vs_kit_packager": {"pass": true, "files": 15, "datasets": 2751, "attrs": 980, "objects": 3062, "differences": 0, "additions_assertions_failed": []},
+      "check3_source_shard_table_assertion": "one row per file, healpix == [21852], every source_metadata and per-class value equals the shard attribute (strings by value), __valid flags consistent, classes match; failures: none",
+      "check4_no_resolution": {"pass": true, "files": 15, "datasets": 4319, "attrs": 1025, "differences": 0},
+      "check5_manifest_roundtrip_and_1ulp": {"pass": true, "manifest_files": 15, "injected": "BGS/spectra/flux[0,0] in desi_dr1_clean_galaxies_z0.10-0.20.h5, verify failed and named file and dataset"},
+      "verify_pristine": "PASSED, 9 checks listed in RUN_SUMMARY.md",
+      "pytest": {"passed": 51, "failed": 0}
+    },
+    "measured": {
+      "extract_elapsed_s": 432.85,
+      "extract_s_kit_log": 363.23,
+      "shard_s_kit_log": 67.91,
+      "seconds_per_pixel_pair": 431.14,
+      "seconds_per_pixel_pair_v1": 437.97,
+      "workers": 1,
+      "peak_rss_kb": 996308,
+      "peak_rss_mb_kit_log": 972.96,
+      "user_s": 425.52,
+      "system_s": 4.11,
+      "driver_total_s": 669,
+      "stage_seconds": {"extract": 433, "package_res": 45, "package_nores": 10, "package_original": 38, "manifest": 7, "verify": 9, "gate_1to2": 62, "gate_3to5": 46, "pytest": 19},
+      "n_objects_extracted": 2831,
+      "n_clean_objects_packaged": "not produced: not a field in the gate JSONs (v1: 2365)",
+      "shard_bytes": 999410870,
+      "shard_bytes_v1": 999410870
+    },
+    "secondary": {}
+  },
+  "outputs": [
+    {"path": "<nas>/pop-cosmos_DESI_packages/kit_reference/kit_gate_21852_v2/", "description": "shard, kept temp file, chunks (kit with/without resolution, original), manifest, extract_log.jsonl, compare_gate_1to2.json, gate_checks_3to5.json", "kind": "other"},
+    {"path": "<scratch>/2026-10-23-desi-fixes/gate_v2.log", "description": "driver stdout+stderr", "kind": "log"},
+    {"path": "<scratch>/2026-10-23-desi-fixes/gate_v2_time.txt", "description": "/usr/bin/time -v output for extraction", "kind": "log"},
+    {"path": "desi_kit/reference/2026-10-23-kit-gate-v2/RUN_SUMMARY.md", "description": "run summary", "kind": "other"}
+  ],
+  "status": {
+    "gates_passed": ["check1", "check2", "check3", "check3_source_shard_table", "check4", "check5", "verify", "pytest"],
+    "gates_failed": [],
+    "blockers": [],
+    "needs_decision": []
+  }
+}

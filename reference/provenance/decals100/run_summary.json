@@ -1,0 +1,142 @@
+{
+ "run_id": "2026-10-23-desi-decals100",
+ "profile": "engineer",
+ "provenance": {
+  "repo": "pop-cosmos_DESI",
+  "git_sha": "aa237d44",
+  "dirty": null,
+  "command": "kit.py extract --pixels desi_kit/pixel_lists/dr1_decals_random100.txt --fetch --raw-root <nas>/desi_dr1/healpix_main --shard-dir .../v4_decals_shards --staging .../2026-10-23-desi-decals100/staging --workers 4 (popfit.runlog id desi-decals100); kit.py package --shard-dir .../v4_decals_shards --out .../v4_decals_zchunks; kit.py manifest; kit.py verify --shard-dir; md5sum",
+  "machine": "x86_64 workstation",
+  "environment": "<scratch>/2026-10-23-desi-kit/env, kit 0.2.0",
+  "seeds": [
+   20261023
+  ],
+  "wall_time_s": {
+   "extraction": 11449,
+   "packaging": 2462.51
+  },
+  "inputs": [
+   {
+    "path": "<nas>/desi_dr1/healpix_main",
+    "bytes": 82678678192,
+    "hash": "sha256 verified per file"
+   }
+  ]
+ },
+ "model": {
+  "name": "desi_kit 0.2.0 extraction + shards + chunk packaging (no fit)",
+  "config_path": "desi_kit/desikit/config.py",
+  "n_free_parameters": 0,
+  "selection": [
+   {
+    "cut": "class-tagged objects to is_galaxy & is_clean_galaxy",
+    "rows_before": 117359,
+    "rows_after": 97553
+   }
+  ]
+ },
+ "parameters": [],
+ "diagnostics": {
+  "chi2_reduced": "not produced: no fit",
+  "residuals": [],
+  "pulls": {
+   "mean": "not produced: no fit",
+   "width": "not produced: no fit",
+   "tail_fraction_3sigma": "not produced: no fit"
+  },
+  "convergence": {
+   "converged": "not produced: no fit"
+  },
+  "physical_assertions": [
+   {
+    "assertion": "manifest recomputes identically",
+    "passed": true
+   },
+   {
+    "assertion": "root n_* equal actual counts",
+    "passed": true
+   },
+   {
+    "assertion": "(targetid, program) unique; no shard row repeated",
+    "passed": true
+   },
+   {
+    "assertion": "z inside [z_lo, z_hi)",
+    "passed": true
+   },
+   {
+    "assertion": "wavelength identical across files",
+    "passed": true
+   },
+   {
+    "assertion": "unit keys present",
+    "passed": true
+   },
+   {
+    "assertion": "spectra_attrs targetid == catalog targetid",
+    "passed": true
+   },
+   {
+    "assertion": "has_resolution consistent with datasets; resolution dtype",
+    "passed": true
+   },
+   {
+    "assertion": "per-shard table: one row per source shard, healpix = source_shards, chunk-level attrs = common value",
+    "passed": true
+   },
+   {
+    "assertion": "every clean shard row in exactly one chunk; z equals shard",
+    "passed": true
+   }
+  ],
+  "secondary": {
+   "verify": "VERIFY PASSED",
+   "n_shards": 100,
+   "n_failed_pixels": 0,
+   "n_objects_shards": 117359,
+   "n_clean_objects_packaged": 97553,
+   "n_BGS": 45698,
+   "n_ELG": 28425,
+   "n_LRG": 23430,
+   "projected_total": 97553,
+   "projected_BGS": 45698,
+   "projected_ELG": 28425,
+   "projected_LRG": 23430,
+   "n_chunk_files": 15,
+   "chunk_bytes": 34528108899,
+   "shard_bytes": 41327409324,
+   "packaging_peak_rss_kb": 633580,
+   "packaging_user_s": 1589.6,
+   "packaging_system_s": 41.08,
+   "per_pixel_seconds_total_sum": 28392.9,
+   "per_pixel_seconds_max": 1073.5,
+   "per_pixel_peak_rss_mb_max": 1358.4
+  }
+ },
+ "outputs": [
+  {
+   "path": "<nas>/pop-cosmos_DESI_packages/v4_decals_zchunks/",
+   "description": "15 chunk files, manifest.json, MD5SUMS.txt, README.md, RUN_SUMMARY.md",
+   "kind": "other"
+  },
+  {
+   "path": "<nas>/pop-cosmos_DESI_packages/v4_decals_shards/",
+   "description": "100 shards and extract_log.jsonl",
+   "kind": "other"
+  },
+  {
+   "path": "<scratch>/2026-10-23-desi-decals100/package.log",
+   "description": "packaging, manifest, verify, md5 log",
+   "kind": "log"
+  }
+ ],
+ "status": {
+  "state": "DONE",
+  "gates_passed": [
+   "kit verify (10 checks)"
+  ],
+  "gates_failed": [],
+  "blockers": [],
+  "needs_decision": []
+ }
+}
