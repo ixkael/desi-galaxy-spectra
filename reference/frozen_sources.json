@@ -1,0 +1,8 @@
+{
+  "source_repo": "pop-cosmos_DESI",
+  "source_commit": "ba74d8e52fb2666886024b9c501846319a30a566",
+  "files": {
+    "extract_desi_dr1_final.py": "81b7b45f2463ff0a873b819bf2190901a3574422148c0c0026f8585778460a63",
+    "package_desi_zchunks.py": "36f1c0ff189875f1bfe1cce1c3928268408343a2fd3cab80f8bbc40698d99c92"
+  }
+}

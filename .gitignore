@@ -1,0 +1,7 @@
+settings.toml
+CLAUDE.md
+.claude/
+.venv/
+__pycache__/
+*.h5
+scratch/
