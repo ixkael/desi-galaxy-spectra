@@ -1,1 +1,2 @@
-__version__ = "1.0.0"
+"""desi_galaxy_spectra: fetch, extract, package and verify DESI DR1 clean-galaxy spectra."""
+from .config import KIT_VERSION as __version__  # noqa: F401

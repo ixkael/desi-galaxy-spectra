@@ -1,0 +1,21 @@
+{
+ "pixel": 21852,
+ "workers": 1,
+ "n_objects_extracted": 2831,
+ "n_clean_objects_packaged": 2365,
+ "seconds_extract": 368.9154417514801,
+ "seconds_shard": 69.05326175689697,
+ "seconds_per_pixel_pair_total": 437.9687035083771,
+ "peak_rss_mb_inprocess": 970.15625,
+ "peak_rss_mb_time_v": 970.15625,
+ "shard_bytes": 999410870,
+ "package_bytes_with_resolution": 839609597,
+ "package_bytes_without_resolution": 136496849,
+ "package_bytes_original_packager": 839581032,
+ "bytes_per_object_with_resolution": 355014.6287526427,
+ "bytes_per_object_without_resolution": 57715.36955602537,
+ "seconds_package_with_resolution": 40.67,
+ "seconds_package_without_resolution": 8.21,
+ "seconds_package_original": 38.57,
+ "note": "package bytes per object = sum of chunk file sizes / clean objects in chunks; single pixel, measured 2026-10-23 on blDesktop, one core"
+}

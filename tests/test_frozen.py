@@ -24,7 +24,7 @@ def test_stub_paths_are_none_and_private_names_absent():
     from desi_galaxy_spectra.frozen.popfit import paths
 
     assert paths.DESI_DR1_HEALPIX is None and paths.FINAL_DESI_EXTRACTION is None
-    assert set(n for n in dir(paths) if not n.startswith("_")) == {
+    assert {n for n in dir(paths) if not n.startswith("_")} == {
         "DESI_DR1_HEALPIX",
         "FINAL_DESI_EXTRACTION",
     }
