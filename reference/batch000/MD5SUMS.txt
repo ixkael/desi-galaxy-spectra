@@ -1,0 +1,16 @@
+8aa705493a557e7eb11150221612de8b  desi_dr1_clean_galaxies_z0.10-0.20.h5
+257f5a6a4c86b7ba5a76b0a20e44b410  desi_dr1_clean_galaxies_z0.20-0.30.h5
+8c6e978eef46dbbfb38a749df08d9b69  desi_dr1_clean_galaxies_z0.30-0.40.h5
+bf127d198ee102b4ef3c636bddb32ad2  desi_dr1_clean_galaxies_z0.40-0.50.h5
+4d56abacf2db2c958397792872fda7d5  desi_dr1_clean_galaxies_z0.50-0.60.h5
+9443f447edeae5802d70203e76b64f3e  desi_dr1_clean_galaxies_z0.60-0.70.h5
+48393a80076158beac17d69765f74548  desi_dr1_clean_galaxies_z0.70-0.80.h5
+147e6af95e1fd4d0d2b5c9569d8b29bf  desi_dr1_clean_galaxies_z0.80-0.90.h5
+e488ed4057d0a7e4339e1c287617681c  desi_dr1_clean_galaxies_z0.90-1.00.h5
+e706edfd95fc14c16a906b14ebe28a14  desi_dr1_clean_galaxies_z1.00-1.10.h5
+db0c67cac31397ebf8e3a90d3dcd22c5  desi_dr1_clean_galaxies_z1.10-1.20.h5
+a80538e447b24f025504b1a65f77a9a3  desi_dr1_clean_galaxies_z1.20-1.40.h5
+bb1d0152be2e33ee50330ec2cf5ad18e  desi_dr1_clean_galaxies_z1.40-1.60.h5
+99af914f60931eaba981c70edbc322e7  desi_dr1_clean_galaxies_z1.60-inf.h5
+94ca856a5ae1b8c54405a76caaa65968  desi_dr1_clean_galaxies_zlt0.10.h5
+1097d6045734f21ec3f8f8df71e02584  manifest.json
