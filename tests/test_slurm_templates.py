@@ -9,7 +9,7 @@ from desi_galaxy_spectra.settings import load_settings
 
 ROOT = Path(__file__).resolve().parents[1]
 SLURM = ROOT / "slurm"
-NAMES = ["extract_batch", "package_verify_batch", "extract_pixel_array", "fetch_test"]
+NAMES = ["extract_batch", "package_verify_batch", "extract_pixel_array", "fetch_test", "batch_group"]
 TEMPLATES = [SLURM / f"{n}.sbatch" for n in NAMES]
 
 # an absolute path: a slash that starts a word (after space, quote, '=', '(' or at line start)
@@ -82,3 +82,14 @@ def test_example_settings_load_with_64_workers(monkeypatch, tmp_path):
     assert s.workers == 64 and s.with_resolution is True
     assert s.raw_root == tmp_path / "raw" and s.batch_root == tmp_path / "batches"
     assert s.keep_raw_after_verify is True
+
+
+def test_batch_group_overlaps_package_with_next_extract():
+    # several batches per allocation: extract one after another (claiming each), package/verify
+    # each in the background as soon as its extraction ends, wait for all, fail if any failed
+    g = _text(SLURM / "batch_group.sbatch")
+    assert re.search(r"for ID in \$DGS_BATCH", g)
+    assert re.search(r"dgs run --batch \"\$ID\" --claim --until extracted", g)
+    assert re.search(r"dgs run --batch \"\$ID\" --until verified.*&$", g, re.M)
+    assert re.search(r"^wait \"\$pid\"", g.replace("    ", ""), re.M) or "wait \"$pid\"" in g
+    assert "batch_$ID/slurm-" in g
