@@ -15,6 +15,7 @@ import h5py
 import numpy as np
 
 from . import config, manifest
+from .parallel import pmap
 from .package import CLASSES, PRESENT, TABLE_GROUP, VALID_SUFFIX, list_shards
 
 _SHARD_RE = re.compile(r"^healpix_(\d+)\.h5$")
@@ -137,9 +138,10 @@ def check_shard_table(f, rel):
     return msgs
 
 
-def verify(target, manifest_path, shard_dir=None, log=print, no_shards=False):
+def verify(target, manifest_path, shard_dir=None, log=print, no_shards=False, workers=1):
     """no_shards=True is the explicit opt-out of the shard-dependent checks; without it, a
-    missing shard_dir makes the verification FAIL."""
+    missing shard_dir makes the verification FAIL.  workers > 1 recomputes the manifest
+    entries (check 1) in that many processes."""
     if shard_dir is not None and no_shards:
         raise ValueError("shard_dir and no_shards are contradictory")
     target = Path(target)
@@ -149,14 +151,15 @@ def verify(target, manifest_path, shard_dir=None, log=print, no_shards=False):
     # 1. manifest recomputes identically
     msgs = []
     on_disk = {str(p.relative_to(target)): p for p in manifest.list_h5(target)}
+    both = sorted(set(man["files"]) & set(on_disk))
+    fresh = dict(zip(both, pmap(manifest.file_entry, [on_disk[r] for r in both], workers)))
     for rel in sorted(set(man["files"]) | set(on_disk)):
         if rel not in on_disk:
             msgs.append(f"{rel}: in manifest but missing on disk")
         elif rel not in man["files"]:
             msgs.append(f"{rel}: on disk but not in manifest")
         else:
-            msgs += manifest.compare_entries(rel, man["files"][rel],
-                                             manifest.file_entry(on_disk[rel]))
+            msgs += manifest.compare_entries(rel, man["files"][rel], fresh[rel])
     if man.get("lockfile_sha256") != config.lockfile_sha256():
         msgs.append("lockfile_sha256 in manifest differs from the current lockfile")
     rep.add("manifest recomputes identically", msgs)

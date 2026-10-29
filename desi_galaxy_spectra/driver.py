@@ -27,6 +27,7 @@ from .batches import read_batch
 from .fetch import Fetcher
 from .manifest import write_manifest
 from .package import md5_file, package
+from .parallel import pmap
 from .runsummary import write_run_summary
 from .settings import Settings
 from .shard import run_pixel_job
@@ -160,10 +161,10 @@ def _step_packaged(s, bid, pixels, shard_dir, out, fetch, log):
     for p in list(out.glob("*.partial")) + list(out.glob("*.tmp")):
         p.unlink()
     t = time.time()
-    package(shard_dir, out, with_resolution=s.with_resolution, log=log)
+    package(shard_dir, out, with_resolution=s.with_resolution, log=log, workers=s.workers)
     t_pkg = time.time() - t
     t = time.time()
-    write_manifest(out, out / "manifest.json", log=log)
+    write_manifest(out, out / "manifest.json", log=log, workers=s.workers)
     return {"package": t_pkg, "manifest": time.time() - t}
 
 
@@ -172,11 +173,11 @@ def _step_verified(s, bid, pixels, shard_dir, out, fetch, log):
         (out / name).unlink(missing_ok=True)
     names = sorted(chunk_names(out) | {"manifest.json"})
     t = time.time()
-    sums = [(md5_file(out / n), n) for n in names]
+    sums = list(zip(pmap(md5_file, [out / n for n in names], s.workers), names))
     _atomic_write(out / "MD5SUMS.txt", "".join(f"{m}  {n}\n" for m, n in sums))
     t_md5 = time.time() - t
     t = time.time()
-    rep = verify(out, out / "manifest.json", shard_dir=shard_dir, log=log)
+    rep = verify(out, out / "manifest.json", shard_dir=shard_dir, log=log, workers=s.workers)
     t_ver = time.time() - t
     sizes = "".join(f"FILE {n} {(out / n).stat().st_size}\n" for n in names)
     text = (f"# Verification: batch {bid}\n\n"

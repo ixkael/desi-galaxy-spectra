@@ -145,3 +145,17 @@ def test_manifest_ignores_timestamps(shard_dir, tmp_path):
     with h5py.File(p, "r+") as f:
         f.attrs["z_lo"] = 0.1000001
     assert manifest.file_entry(p) != a
+
+
+def test_parallel_package_manifest_verify_match_serial(shard_dir, tmp_path):
+    # workers > 1 cuts the chunks, hashes the files and runs the verify checks in parallel
+    # processes; the products must be byte-identical to the serial path.
+    serial, par = tmp_path / "serial", tmp_path / "par"
+    package.package(shard_dir, serial, log=lambda m: None)
+    package.package(shard_dir, par, workers=2, log=lambda m: None)
+    ms = manifest.build_manifest(serial, log=lambda m: None)
+    mp_ = manifest.build_manifest(par, workers=2, log=lambda m: None)
+    assert mp_["files"] == ms["files"]
+    manifest.write_manifest(par, tmp_path / "m.json", workers=2, log=lambda m: None)
+    rep = verify.verify(par, tmp_path / "m.json", shard_dir=shard_dir, workers=2, log=lambda m: None)
+    assert rep.ok, rep.text()

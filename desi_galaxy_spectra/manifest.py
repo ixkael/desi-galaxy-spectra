@@ -15,6 +15,7 @@ import h5py
 import numpy as np
 
 from . import config
+from .parallel import pmap
 
 TIMESTAMP_ATTRS = frozenset({"created", "creation_date"})
 BLOCK_BYTES = 64 * 1024 * 1024
@@ -83,13 +84,14 @@ def list_h5(target):
     return sorted(p for p in target.rglob("*.h5") if p.is_file())
 
 
-def build_manifest(target, log=print) -> dict:
+def build_manifest(target, log=print, workers=1) -> dict:
+    """workers > 1 hashes the files in that many processes."""
     target = Path(target)
-    files = {}
-    for p in list_h5(target):
-        rel = str(p.relative_to(target))
+    paths = list_h5(target)
+    rels = [str(p.relative_to(target)) for p in paths]
+    for rel in rels:
         log(f"manifest {rel}")
-        files[rel] = file_entry(p)
+    files = dict(zip(rels, pmap(file_entry, paths, workers)))
     return {
         "kit_version": config.KIT_VERSION,
         "lockfile_sha256": config.lockfile_sha256(),
@@ -98,8 +100,8 @@ def build_manifest(target, log=print) -> dict:
     }
 
 
-def write_manifest(target, out, log=print) -> dict:
-    m = build_manifest(target, log)
+def write_manifest(target, out, log=print, workers=1) -> dict:
+    m = build_manifest(target, log, workers)
     Path(out).write_text(json.dumps(m, indent=1, sort_keys=True) + "\n")
     return m
 

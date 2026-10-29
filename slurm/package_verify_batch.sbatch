@@ -13,6 +13,10 @@
 #SBATCH --time=24:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
+# The chunk files, their checksums and the verify checks run in `workers` parallel processes.
+#SBATCH --cpus-per-task=64
+# Explicit memory: see extract_batch.sbatch.
+# #SBATCH --mem=110G
 #SBATCH --output=slurm-start-%A_%a.log
 # Site-specific flags are filled in by the site notes; leave them commented until then.
 # #SBATCH --partition=<partition>

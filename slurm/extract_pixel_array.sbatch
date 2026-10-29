@@ -15,6 +15,9 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
+# On Isambard-AI every array task is allocated (and charged) a whole 72-core GH200 slice; prefer
+# extract_batch.sbatch there.  Explicit memory: see extract_batch.sbatch.
+# #SBATCH --mem=8G
 #SBATCH --output=slurm-start-%A_%a.log
 # Site-specific flags are filled in by the site notes; leave them commented until then.
 # #SBATCH --partition=<partition>

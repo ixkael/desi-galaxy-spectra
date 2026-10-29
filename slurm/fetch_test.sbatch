@@ -13,6 +13,8 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
+# Explicit memory: see extract_batch.sbatch.
+# #SBATCH --mem=8G
 #SBATCH --output=slurm-fetch-test-%j.log
 # Site-specific flags are filled in by the site notes; leave them commented until then.
 # #SBATCH --partition=<partition>

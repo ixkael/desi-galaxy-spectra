@@ -16,6 +16,9 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=64
+# Memory is a site flag (commented): without it Isambard-AI gives the job the whole node's memory, and
+# the charge follows the largest of the GPU, CPU and memory shares (one GH200 slice = 72 cores, 115 GB).
+# #SBATCH --mem=110G
 #SBATCH --output=slurm-start-%A_%a.log
 # Site-specific flags are filled in by the site notes; leave them commented until then.
 # #SBATCH --partition=<partition>

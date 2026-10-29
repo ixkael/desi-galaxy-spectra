@@ -14,6 +14,7 @@ import time
 from pathlib import Path
 
 from . import config
+from .parallel import pmap
 
 import h5py
 import numpy as np
@@ -359,7 +360,21 @@ def dry_run(ss, chunks, with_resolution, log=print):
     return tot
 
 
-def package(shard_dir, out_dir, with_resolution=True, only=None, dry=False, log=print):
+def _chunk_job(job):
+    """One chunk in a worker process: its own ShardSet, log lines returned to the parent."""
+    shards, (idx, name, lo, hi), out_dir, with_resolution, md5 = job
+    lines = []
+    ss = ShardSet(shards)
+    try:
+        f = write_chunk(ss, idx, name, lo, hi, out_dir, with_resolution, md5, lines.append)
+    finally:
+        ss.close()
+    return f, lines
+
+
+def package(shard_dir, out_dir, with_resolution=True, only=None, dry=False, log=print, workers=1):
+    """workers > 1 writes the chunk files in that many processes (each opens the shards itself);
+    the files and the log order are those of the serial run."""
     shards = list_shards(shard_dir)
     if not shards:
         raise PackageError(f"no healpix_<pix>.h5 shards in {shard_dir}")
@@ -377,10 +392,18 @@ def package(shard_dir, out_dir, with_resolution=True, only=None, dry=False, log=
         os.makedirs(out_dir, exist_ok=True)
         md5 = source_manifest_md5(shards)
         written = []
-        for idx, name, lo, hi in chunks:
-            f = write_chunk(ss, idx, name, lo, hi, out_dir, with_resolution, md5, log)
-            if f:
-                written.append(f)
+        if workers > 1:
+            jobs = [(shards, c, out_dir, with_resolution, md5) for c in chunks]
+            for f, lines in pmap(_chunk_job, jobs, workers):
+                for m in lines:
+                    log(m)
+                if f:
+                    written.append(f)
+        else:
+            for idx, name, lo, hi in chunks:
+                f = write_chunk(ss, idx, name, lo, hi, out_dir, with_resolution, md5, log)
+                if f:
+                    written.append(f)
         log(f"done in {(time.time() - t0) / 60:.1f} min")
         return written
     finally:
