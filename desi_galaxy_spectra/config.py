@@ -49,18 +49,20 @@ def sha_name(pix: int, prog: str) -> str:
     return f"redux_iron_healpix_{SURVEY}_{prog}_{pixgroup(pix)}_{int(pix)}.sha256sum"
 
 
-def remote_dir(pix: int, prog: str) -> str:
-    return f"{BASE_URL}/{SURVEY}/{prog}/{pixgroup(pix)}/{int(pix)}"
+def remote_dir(pix: int, prog: str, base_url: str = None) -> str:
+    """`base_url` (default BASE_URL) lets a mirror serve the same paths, e.g. the PIC copy."""
+    base = (base_url or BASE_URL).rstrip("/")
+    return f"{base}/{SURVEY}/{prog}/{pixgroup(pix)}/{int(pix)}"
 
 
-def pixel_urls(pix: int):
+def pixel_urls(pix: int, base_url: str = None):
     """[(prog, kind, filename, url)] for every file the kit needs for one pixel."""
     out = []
     for prog in PROGRAMS:
         for kind, fn in (("coadd", coadd_name(pix, prog)),
                          ("redrock", redrock_name(pix, prog)),
                          ("sha256sum", sha_name(pix, prog))):
-            out.append((prog, kind, fn, f"{remote_dir(pix, prog)}/{fn}"))
+            out.append((prog, kind, fn, f"{remote_dir(pix, prog, base_url)}/{fn}"))
     return out
 
 

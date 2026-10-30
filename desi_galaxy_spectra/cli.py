@@ -74,10 +74,37 @@ def _batch_id(text):
 def cmd_fetch(args):
     from .fetch import Fetcher
     raw_root = _pick(args, args.raw_root, "--raw-root", "raw_root")
-    f = Fetcher()
-    for pix in _pixels(args):
-        _log(f"pixel {pix}")
-        f.fetch_pixel(pix, raw_root, log=_log)
+    base_url = getattr(args, "base_url", None)
+    jobs = max(1, int(getattr(args, "jobs", 1) or 1))
+    pixels = _pixels(args)
+    if jobs == 1:
+        f = Fetcher(base_url=base_url)
+        for pix in pixels:
+            _log(f"pixel {pix}")
+            f.fetch_pixel(pix, raw_root, log=_log)
+        return 0
+
+    # One Fetcher (and one requests.Session) per worker: a Session is not safe to share across
+    # threads.  Log lines are serialised so that interleaved pixels stay readable.
+    import threading
+    from concurrent.futures import ThreadPoolExecutor
+    lock = threading.Lock()
+    local = threading.local()
+
+    def log_locked(msg):
+        with lock:
+            _log(msg)
+
+    def one(pix):
+        f = getattr(local, "fetcher", None)
+        if f is None:
+            f = local.fetcher = Fetcher(base_url=base_url)
+        log_locked(f"pixel {pix}")
+        f.fetch_pixel(pix, raw_root, log=log_locked)
+
+    with ThreadPoolExecutor(max_workers=jobs) as ex:
+        # list() re-raises the first failure, as the serial loop does
+        list(ex.map(one, pixels))
     return 0
 
 
@@ -255,6 +282,10 @@ def build_parser():
     p = sub.add_parser("fetch", help="download + sha256-verify the raw files of the listed pixels")
     p.add_argument("--pixels", required=True)
     p.add_argument("--raw-root", help="default: raw_root of the settings")
+    p.add_argument("--base-url", help=f"serve the files from a mirror of the same path layout "
+                                      f"(default: {config.BASE_URL})")
+    p.add_argument("--jobs", type=int, default=1,
+                   help="pixels fetched in parallel, one HTTPS session each (default: 1)")
     p.set_defaults(fn=cmd_fetch)
 
     p = sub.add_parser("extract", help="extract pixels into shards")

@@ -50,7 +50,7 @@ class Fetcher:
     """Thin wrapper over a requests-like session (injectable for tests)."""
 
     def __init__(self, session=None, retries=config.HTTP_RETRIES, sleep=time.sleep,
-                 timeout=config.HTTP_TIMEOUT_S):
+                 timeout=config.HTTP_TIMEOUT_S, base_url=None):
         if session is None:
             import requests
             session = requests.Session()
@@ -58,6 +58,7 @@ class Fetcher:
         self.retries = retries
         self.sleep = sleep
         self.timeout = timeout
+        self.base_url = base_url        # None = config.BASE_URL (the DESI host)
 
     # ------------------------------------------------------------------ HEAD
     def head(self, url):
@@ -136,15 +137,18 @@ class Fetcher:
             dirs[prog] = d
             marker = d / config.SHA_MARKER
             names = {k: fn for p, k, fn, _ in config.pixel_urls(pix) if p == prog}
-            urls = {k: u for p, k, _, u in config.pixel_urls(pix) if p == prog}
+            urls = {k: u for p, k, _, u in config.pixel_urls(pix, self.base_url) if p == prog}
             if marker.exists() and all((d / names[k]).exists() for k in ("coadd", "redrock")):
                 continue
             for kind in ("sha256sum", "redrock", "coadd"):
                 status, size = self.head(urls[kind])
                 if status != 200:
                     raise FetchError(f"{urls[kind]}: HEAD status {status}")
-                log(f"  fetch {names[kind]} ({size} B)")
-                self.download(urls[kind], d / names[kind], expected_size=size)
+                # A mirror may answer HEAD without a usable Content-Length (the PIC copy returns 0),
+                # so the size cross-check is skipped there; verify_sha below is the integrity gate
+                # either way, and it deletes a bad file so that a rerun downloads it again.
+                log(f"  fetch {names[kind]} ({size if size else 'size unknown'} B)")
+                self.download(urls[kind], d / names[kind], expected_size=size or None)
             self.verify_sha(d, names)
             marker.write_text("ok\n")
         return dirs
