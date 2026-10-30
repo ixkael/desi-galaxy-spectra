@@ -45,10 +45,19 @@ def extract_to_temp(coadd_files, redrock_dir, temp_path, log=_log_default):
         raise ShardError("extractor collected no rows")
     programs = {r["program"] for r in rows}
     # Ruling: BGS-from-dark rows are kept.  The extractor drops every BGS-tagged row if no bright
-    # row survives (write_hdf5 has_bright), so both programmes must have contributed rows.
+    # row survives (write_hdf5 has_bright), so a missing bright programme is an error only when
+    # there is a BGS-classed row for it to drop.  A pixel whose dark programme carries no BGS row
+    # loses nothing and is extracted (change note 2026-10-30, PI-approved); check_bgs_kept below
+    # stays the backstop for the drop itself.
+    if "bright" not in programs:
+        n_bgs = sum(1 for r in rows if r.get("class") == "BGS")
+        if n_bgs:
+            raise ShardError(f"programs with extracted rows are {sorted(programs)}, expected "
+                             f"{sorted(config.PROGRAMS)}: the extractor would drop "
+                             f"{n_bgs} BGS-from-dark rows")
     if programs != set(config.PROGRAMS):
-        raise ShardError(f"programs with extracted rows are {sorted(programs)}, expected "
-                         f"{sorted(config.PROGRAMS)}: the extractor would drop BGS-from-dark rows")
+        log(f"NOTE: pixel extracted from programmes {sorted(programs)} only "
+            f"(of {sorted(config.PROGRAMS)}); no BGS-classed row is at stake")
     ext.write_hdf5(rows, Path(temp_path), n_coadds=len(coadd_files), log=log,
                    programs_processed=programs)
     check_bgs_kept(temp_path)
@@ -301,6 +310,7 @@ def process_pixel(pix, coadd_by_prog, redrock_by_prog, shard_dir, scratch,
         check_inputs_against_sha256sum(pix, coadd_by_prog, redrock_by_prog, hashes)
     with h5py.File(temp, "r") as h:
         ps = read_photsys(h, {k: v for k, v in coadd_by_prog.items()})
+        programs_processed = h["metadata"].attrs.get("programs_processed", "unknown")
     shard_dir.mkdir(parents=True, exist_ok=True)
     shard = shard_dir / config.shard_name(pix)
     restack(temp, shard, pix, ps, input_files, log=log, coadd_dirs=coadd_dirs)
@@ -313,6 +323,7 @@ def process_pixel(pix, coadd_by_prog, redrock_by_prog, shard_dir, scratch,
     import resource
     return {
         "healpix": int(pix), "n_objects": int(n_rows),
+        "programs_processed": str(programs_processed),
         "seconds_extract": t_extract, "seconds_shard": t_shard,
         "seconds_total": t_extract + t_shard,
         "peak_rss_mb": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024.0,

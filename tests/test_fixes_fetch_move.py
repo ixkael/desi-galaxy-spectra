@@ -218,8 +218,10 @@ def test_fetch_requires_raw_root(tmp_path, env, monkeypatch):
 
 
 # ------------------------------------------------------------------------------------- S3
-def _rows(progs):
-    return [{"program": p} for p in progs]
+def _rows(progs, cls="BGS"):
+    # `class` matters since the 2026-10-30 change note: the single-programme guard raises only
+    # when a BGS-classed row is at stake.  BGS keeps this test exercising the guard as before.
+    return [{"program": p, "class": cls} for p in progs]
 
 
 def test_bgs_from_dark_guard(tmp_path, monkeypatch):

@@ -10,7 +10,7 @@ import pytest
 from desi_galaxy_spectra import cli, config
 from desi_galaxy_spectra.fetch import FetchError, Fetcher
 
-from test_fetch_dryrun import FakeSession, Resp, pixel_files
+from test_fetch_dryrun import FakeSession, Resp
 
 MIRROR = "https://mirror.example/data/public/DESI/DR1/spectro/redux/iron/healpix"
 
