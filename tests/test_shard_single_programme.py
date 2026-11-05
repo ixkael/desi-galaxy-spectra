@@ -51,6 +51,48 @@ def test_dark_only_with_a_bgs_row_still_raises(tmp_path, monkeypatch):
         shard.extract_to_temp([tmp_path / "a.fits"], tmp_path, tmp_path / "t.h5")
 
 
+def _bgs(desi_target, spectype, targetid=1):
+    return {"program": "dark", "class": "BGS", "desi_target": desi_target,
+            "spectype": spectype, "targetid": targetid}
+
+
+BGS_ANY_QSO = (1 << 60) | shard.DESI_BIT_QSO
+
+
+def test_dark_only_qso_flagged_bgs_rows_are_dropped_on_record(tmp_path, monkeypatch):
+    """Pixels 2185/19862/27566/8648: QSO-flagged non-galaxy BGS rows are removed before writing."""
+    seen, notes = {}, []
+    rows = [{"program": "dark", "class": "ELG"}, _bgs(BGS_ANY_QSO, "QSO", 11),
+            _bgs(BGS_ANY_QSO, "STAR", 12)]
+    monkeypatch.setattr(shard.ext, "collect_rows", lambda *a, **k: rows)
+
+    def write(rows_in, path, n_coadds, log, programs_processed):
+        seen["classes"] = [r["class"] for r in rows_in]
+        _fake_write()(rows_in, path, n_coadds, log, programs_processed)
+    monkeypatch.setattr(shard.ext, "write_hdf5", write)
+    temp = tmp_path / "t.h5"
+    assert shard.extract_to_temp([tmp_path / "a.fits"], tmp_path, temp, log=notes.append) == 1
+    assert seen["classes"] == ["ELG"]
+    assert any("dropped 2 BGS-classed QSO row(s)" in n and "[11, 12]" in n for n in notes)
+    with h5py.File(temp, "r") as h:
+        assert h["metadata"].attrs["bgs_qso_rows_dropped"].tolist() == [11, 12]
+
+
+def test_dark_only_bgs_row_without_qso_bit_still_raises(tmp_path, monkeypatch):
+    monkeypatch.setattr(shard.ext, "collect_rows", lambda *a, **k: [
+        _bgs(BGS_ANY_QSO, "QSO"), _bgs(1 << 60, "QSO")])
+    monkeypatch.setattr(shard.ext, "write_hdf5", _fake_write())
+    with pytest.raises(shard.ShardError, match="2 BGS-from-dark rows, 1 of them not"):
+        shard.extract_to_temp([tmp_path / "a.fits"], tmp_path, tmp_path / "t.h5")
+
+
+def test_dark_only_qso_flagged_galaxy_still_raises(tmp_path, monkeypatch):
+    monkeypatch.setattr(shard.ext, "collect_rows", lambda *a, **k: [_bgs(BGS_ANY_QSO, "GALAXY")])
+    monkeypatch.setattr(shard.ext, "write_hdf5", _fake_write())
+    with pytest.raises(shard.ShardError, match=r"1 GALAXY"):
+        shard.extract_to_temp([tmp_path / "a.fits"], tmp_path, tmp_path / "t.h5")
+
+
 def test_bright_only_extracts(tmp_path, monkeypatch):
     """No dark programme: BGS rows are real BGS, nothing is dropped."""
     monkeypatch.setattr(shard.ext, "collect_rows",

@@ -26,6 +26,7 @@ CLASSES = pk.CLASSES
 NWAVE, NDIAG, OBJ_ATTRS = pk.NWAVE, pk.NDIAG, pk.OBJ_ATTRS
 BLOCK = 32
 GZIP = 4
+DESI_BIT_QSO = 1 << 2
 
 
 class ShardError(RuntimeError):
@@ -49,19 +50,38 @@ def extract_to_temp(coadd_files, redrock_dir, temp_path, log=_log_default):
     # there is a BGS-classed row for it to drop.  A pixel whose dark programme carries no BGS row
     # loses nothing and is extracted (change note 2026-10-30, PI-approved); check_bgs_kept below
     # stays the backstop for the drop itself.
+    # A dark-only pixel whose BGS rows are all QSO-flagged non-galaxies drops them here, on record,
+    # so the frozen extractor drops nothing (change note 2026-11-04, PI-approved 2026-11-05).
+    dropped_qso = []
     if "bright" not in programs:
-        n_bgs = sum(1 for r in rows if r.get("class") == "BGS")
-        if n_bgs:
+        bgs = [r for r in rows if r.get("class") == "BGS"]
+        keep = [r for r in bgs if not _droppable_bgs_qso(r)]
+        if keep:
+            n_gal = sum(1 for r in keep if r.get("spectype") == "GALAXY")
             raise ShardError(f"programs with extracted rows are {sorted(programs)}, expected "
                              f"{sorted(config.PROGRAMS)}: the extractor would drop "
-                             f"{n_bgs} BGS-from-dark rows")
+                             f"{len(bgs)} BGS-from-dark rows, {len(keep)} of them not a "
+                             f"QSO-flagged non-galaxy ({n_gal} GALAXY)")
+        if bgs:
+            dropped_qso = [int(r["targetid"]) for r in bgs]
+            rows = [r for r in rows if r.get("class") != "BGS"]
+            log(f"NOTE: dropped {len(dropped_qso)} BGS-classed QSO row(s) from dark-only pixel: "
+                f"targetids {dropped_qso}")
     if programs != set(config.PROGRAMS):
         log(f"NOTE: pixel extracted from programmes {sorted(programs)} only "
             f"(of {sorted(config.PROGRAMS)}); no BGS-classed row is at stake")
     ext.write_hdf5(rows, Path(temp_path), n_coadds=len(coadd_files), log=log,
                    programs_processed=programs)
+    if dropped_qso:
+        with h5py.File(temp_path, "a") as h:
+            h["metadata"].attrs["bgs_qso_rows_dropped"] = np.asarray(dropped_qso, dtype="i8")
     check_bgs_kept(temp_path)
     return len(rows)
+
+
+def _droppable_bgs_qso(row):
+    """A BGS-classed row carrying the QSO target bit that redrock did not call a galaxy."""
+    return bool(int(row.get("desi_target", 0)) & DESI_BIT_QSO) and row.get("spectype") != "GALAXY"
 
 
 def check_bgs_kept(temp_path):
